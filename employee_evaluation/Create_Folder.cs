@@ -10,21 +10,36 @@ namespace employee_evaluation
 {
     internal class Create_Folder
     {
-        string defaulFilePath = @"" + Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + "\\Desktop\\Performance Output";
+        Path_class folderPath = new Path_class();
         public void createDesktopFolder()
         {
             // this checks if the folder has been created. and if not create one
             // compilation of system output 
-            if(!Directory.Exists(defaulFilePath))
+            if(!Directory.Exists(folderPath.MainFolderPath()))
             {
                 // create folder
-                Directory.CreateDirectory(defaulFilePath);
-                MessageBox.Show("Folder is created @ \n" + defaulFilePath);
+                Directory.CreateDirectory(folderPath.MainFolderPath());
+                MessageBox.Show("Folder is created @ \n" + folderPath.MainFolderPath());
             }
             else
             {
                 MessageBox.Show("Folder compilation is existing.");
             }
+        }
+
+        public void createSubFolder()
+        {
+            string subFolder = folderPath.SubFolderPath();
+            if (!Directory.Exists(folderPath.SubFolderPath()))
+            {
+                Directory.CreateDirectory(folderPath.SubFolderPath());               
+            }
+            else
+            {
+                // MessageBox.Show("Folder is existing!");
+            }
+            //return subFolder;
+
         }
     }
 }

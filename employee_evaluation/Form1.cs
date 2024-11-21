@@ -1,12 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace employee_evaluation
@@ -16,7 +11,8 @@ namespace employee_evaluation
         // allow the user to browse files
         OpenFileDialog browseFile = new OpenFileDialog();
 
-        string mainDefaultFilePath = @"" + Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + "\\Desktop\\Performance Output";
+        //string mainDefaultFilePath = @"" + Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + "\\Desktop\\Performance Output";
+        Path_class folderPath = new Path_class();
         string filePath;
 
         List<string> lines = new List<string>();
@@ -29,7 +25,7 @@ namespace employee_evaluation
 
         public Form1()
         {
-            InitializeComponent();
+            InitializeComponent();            
             folderCreation.createDesktopFolder();
         }
 
@@ -55,14 +51,21 @@ namespace employee_evaluation
 
         private void button2_Click(object sender, EventArgs e)
         {
+            // locates the textfile and read its whole content.
+            // and stores its content to a list. a list is where you can store texts in an array form.
+            List<string> contents = classesMethods.makeEmployeeAsObject(File.ReadAllLines(filePath).ToList());
 
-            string test = General_class.makeEmployeeAsObject(File.ReadAllLines(filePath).ToList());
-            MessageBox.Show(test);
+            folderCreation.createSubFolder();
+
+            // calls the functions createFile from Employee class and pass the file path, and the contents
+            classesMethods.createFile(folderPath.SubFolderPath(), contents);
+            //folderCreation.createSubFolder();
+            //MessageBox.Show(folderCreation.createSubFolder());
         }
 
         private void mainDirectoryToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            MessageBox.Show(mainDefaultFilePath);            
+            MessageBox.Show(folderPath.MainFolderPath());            
         }
 
     }
