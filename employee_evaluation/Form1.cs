@@ -59,8 +59,7 @@ namespace employee_evaluation
 
             // calls the functions createFile from Employee class and pass the file path, and the contents
             classesMethods.createFile(folderPath.SubFolderPath(), contents);
-            //folderCreation.createSubFolder();
-            //MessageBox.Show(folderCreation.createSubFolder());
+            
         }
 
         private void mainDirectoryToolStripMenuItem_Click(object sender, EventArgs e)

@@ -39,7 +39,7 @@ namespace employee_evaluation
                 string[] items = person.Split(',');
 
                 // employee is a constructor
-                Employee personInfo = new Employee(items[0], items[1], items[2]);
+                Employee personInfo = new Employee(items[0], items[1], items[2], items[3], items[4], items[5], items[6], items[7], items[8]);
 
                 // addes the persons into a new list
                 contents.Add(personInfo.ToString());
