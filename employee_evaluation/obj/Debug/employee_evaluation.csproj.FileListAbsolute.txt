@@ -1,0 +1,10 @@
+C:\Users\Ceron Calsena\OneDrive\Desktop\employee_evaluation\employee_evaluation\bin\Debug\employee_evaluation.exe.config
+C:\Users\Ceron Calsena\OneDrive\Desktop\employee_evaluation\employee_evaluation\bin\Debug\employee_evaluation.exe
+C:\Users\Ceron Calsena\OneDrive\Desktop\employee_evaluation\employee_evaluation\bin\Debug\employee_evaluation.pdb
+C:\Users\Ceron Calsena\OneDrive\Desktop\employee_evaluation\employee_evaluation\obj\Debug\employee_evaluation.csproj.AssemblyReference.cache
+C:\Users\Ceron Calsena\OneDrive\Desktop\employee_evaluation\employee_evaluation\obj\Debug\employee_evaluation.Form1.resources
+C:\Users\Ceron Calsena\OneDrive\Desktop\employee_evaluation\employee_evaluation\obj\Debug\employee_evaluation.Properties.Resources.resources
+C:\Users\Ceron Calsena\OneDrive\Desktop\employee_evaluation\employee_evaluation\obj\Debug\employee_evaluation.csproj.GenerateResource.cache
+C:\Users\Ceron Calsena\OneDrive\Desktop\employee_evaluation\employee_evaluation\obj\Debug\employee_evaluation.csproj.CoreCompileInputs.cache
+C:\Users\Ceron Calsena\OneDrive\Desktop\employee_evaluation\employee_evaluation\obj\Debug\employee_evaluation.exe
+C:\Users\Ceron Calsena\OneDrive\Desktop\employee_evaluation\employee_evaluation\obj\Debug\employee_evaluation.pdb
