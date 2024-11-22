@@ -55,17 +55,22 @@ namespace employee_evaluation
             // and stores its content to a list. a list is where you can store texts in an array form.
             List<string> contents = classesMethods.makeEmployeeAsObject(File.ReadAllLines(filePath).ToList());
 
+            // creates subfolder
             folderCreation.createSubFolder();
 
             // calls the functions createFile from Employee class and pass the file path, and the contents
+            // this method is to create a text file
             classesMethods.createFile(folderPath.SubFolderPath(), contents);
             
+        }
+        private void button3_Click(object sender, EventArgs e)
+        {            
+            classesMethods.skillsGrade(File.ReadAllLines(filePath).ToList());
         }
 
         private void mainDirectoryToolStripMenuItem_Click(object sender, EventArgs e)
         {
             MessageBox.Show(folderPath.MainFolderPath());            
-        }
-
+        }       
     }
 }
