@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
+using System.Windows.Forms.DataVisualization.Charting;
 
 namespace employee_evaluation
 {
@@ -73,7 +74,16 @@ namespace employee_evaluation
         }
         private void button3_Click(object sender, EventArgs e)
         {            
-            classesMethods.skillsGrade(File.ReadAllLines(filePath).ToList());
+            string grades = (classesMethods.skillsGrade(File.ReadAllLines(filePath).ToList()));
+            string[] gradesArray = { grades };
+            foreach(string grade in gradesArray)
+            {                
+                string[] splitterArray = grade.Split(',');
+                for(int i = 0; i < splitterArray.Length; i++)
+                {
+                    chart1.Series["C#"].Points.AddXY(i, splitterArray[i]);
+                }
+            }            
         }
 
         private void mainDirectoryToolStripMenuItem_Click(object sender, EventArgs e)

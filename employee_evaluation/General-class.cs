@@ -49,36 +49,39 @@ namespace employee_evaluation
             return contents;
         }
 
-        public List<int> skillsGrade(List<string> employeeContent)
+        public string skillsGrade(List<string> employeeContent)
         {
-            List<int> gradeContents = new List<int>();
-            //List<string> gradeContents = new List<string>();
-            foreach(string employeeSkill in employeeContent)
+            string gradeContents = "";
+
+            foreach (string employeeSkill in employeeContent)
             {
                 string[] seperateGrades = employeeSkill.Split(',');
-                //string[] getGradeSkills = { seperateGrades[3], seperateGrades[4], seperateGrades[5], seperateGrades[6], seperateGrades[7], seperateGrades[8] };
-                string[,] getGradeSkills = new string[,]{ {seperateGrades[3] }, {seperateGrades[4] }, {seperateGrades[5] }, {seperateGrades[6] }, {seperateGrades[7] }, { seperateGrades[8] } };
-
+                //string[] getGradeSkills = { seperateGrades[2], seperateGrades[3] };
                 
+                string[,] getGradeSkills = new string[,]{ {seperateGrades[3] }, {seperateGrades[4] }, {seperateGrades[5] }, {seperateGrades[6] }, {seperateGrades[7] }, { seperateGrades[8] } };                              
                 //GET COL ARRAY VALUE 
                 int colLength = getGradeSkills.GetLength(0);                
                 int[] colArray = new int[colLength];
+                
                 for(int loopThruArray = 0; loopThruArray < colLength; loopThruArray++)
                 {
-                    colArray[loopThruArray] = Convert.ToInt32(getGradeSkills[loopThruArray,0].ToString());
+                    colArray[loopThruArray] = Convert.ToInt32(getGradeSkills[loopThruArray,0].ToString());                    
                 }
 
+                /*
                 int rowLength = getGradeSkills.GetLength(1);
                 int[] rowArray = new int[rowLength];
                 for (int loopThruArray = 0; loopThruArray < rowLength; loopThruArray++)
                 {
                     rowArray[loopThruArray] = Convert.ToInt32(getGradeSkills[0,loopThruArray].ToString());
                 }
-
-                Console.WriteLine(string.Join(",",colArray));                
+                */
+                gradeContents += string.Join(",", colArray) + ",";                
+                
+                //gradeContents += string.Join(",", getGradeSkills) + ",";
             }
             return gradeContents;
-        }        
+        }                
 
         public void createFile(string Path, List<string> contents)
         {           
