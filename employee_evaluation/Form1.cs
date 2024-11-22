@@ -14,6 +14,7 @@ namespace employee_evaluation
         //string mainDefaultFilePath = @"" + Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + "\\Desktop\\Performance Output";
         Path_class folderPath = new Path_class();
         string filePath;
+        string gradingH = "0", gradingL = "0";
 
         List<string> lines = new List<string>();
         // a list and calling the employee class
@@ -32,6 +33,13 @@ namespace employee_evaluation
         private void Form1_Load(object sender, EventArgs e)
         {
            
+        }
+
+        public string Reciever(string Fvalue, string Lvalue)
+        {            
+            gradingH = "" + Fvalue;
+            gradingL = "" + Lvalue;
+            return gradingH + gradingL;
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -71,6 +79,23 @@ namespace employee_evaluation
         private void mainDirectoryToolStripMenuItem_Click(object sender, EventArgs e)
         {
             MessageBox.Show(folderPath.MainFolderPath());            
-        }       
+        }
+
+        private void highestToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show(gradingH);
+        }
+
+        private void lowestToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show(gradingL);
+        }
+
+        private void editGradingToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Grading_System f2 = new Grading_System();
+            f2.Show();
+            this.Hide();
+        }
     }
 }

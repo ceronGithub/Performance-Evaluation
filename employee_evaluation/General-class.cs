@@ -75,7 +75,7 @@ namespace employee_evaluation
                     rowArray[loopThruArray] = Convert.ToInt32(getGradeSkills[0,loopThruArray].ToString());
                 }
 
-                Console.WriteLine(string.Join("",colArray));                
+                Console.WriteLine(string.Join(",",colArray));                
             }
             return gradeContents;
         }        

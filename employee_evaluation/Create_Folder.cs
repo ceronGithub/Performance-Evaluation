@@ -23,7 +23,7 @@ namespace employee_evaluation
             }
             else
             {
-                MessageBox.Show("Folder compilation is existing.");
+                //MessageBox.Show("Folder compilation is existing.");
             }
         }
 
