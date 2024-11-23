@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
@@ -74,16 +75,75 @@ namespace employee_evaluation
         }
         private void button3_Click(object sender, EventArgs e)
         {            
-            string grades = (classesMethods.skillsGrade(File.ReadAllLines(filePath).ToList()));
-            string[] gradesArray = { grades };
-            foreach(string grade in gradesArray)
-            {                
-                string[] splitterArray = grade.Split(',');
-                for(int i = 0; i < splitterArray.Length; i++)
+            string skillGradeOne = (classesMethods.getSkillOne(File.ReadAllLines(filePath).ToList()));
+            string skillGradeTwo = (classesMethods.getSkillTwo(File.ReadAllLines(filePath).ToList()));
+            string personName = (classesMethods.personInfo(File.ReadAllLines(filePath).ToList()));
+            
+            string[] skillOneArray = { skillGradeOne };
+            string[] skillTwoArray = { skillGradeTwo };
+            string[] skillThreeArray = { skillGradeOne };
+            string[] skillFourArray = { skillGradeOne };
+            string[] skillFiveArray = { skillGradeOne };
+
+            string[] personNames = { personName };
+            foreach(string nameLabel in personNames)
+            {
+                string[] splitNameLabel = nameLabel.Split(',');
+                foreach (string skillOne in skillOneArray)
                 {
-                    chart1.Series["C#"].Points.AddXY(i, splitterArray[i]);
+                    string[] splitSkillOne = skillOne.Split(',');
+                    for (int i = 0; i < splitSkillOne.Length; i++)
+                    {
+                        chart1.Series["C#"].Points.AddXY(splitNameLabel[i], splitSkillOne[i]);                                       
+                    }
                 }
-            }            
+
+                foreach (string skillTwo in skillTwoArray)
+                {
+                    Chart newChart = new Chart();
+                    newChart.Height = 300;
+                    newChart.Width = 580;                    
+                    newChart.Series.Clear();
+                    var series1 = new System.Windows.Forms.DataVisualization.Charting.Series
+                    {                        
+                        Name = "Js",                        
+                        Color = System.Drawing.Color.Green,
+                        IsVisibleInLegend = true,
+                        IsXValueIndexed = true,                        
+                        ChartType = SeriesChartType.Column                 
+                    };                    
+                    newChart.Series.Add(series1);             
+                                    
+                    string[] splitSkill = skillTwo.Split(',');
+                    for (int i = 0; i < splitSkill.Length; i++)
+                    {                        
+                        series1.Points.AddXY(splitNameLabel[i], splitSkill[i]);
+                    }
+                    newChart.Invalidate();
+                    ChartArea chartArea = new ChartArea();
+                    chartArea.CursorX.IsUserEnabled = true;
+                    chartArea.CursorY.IsUserEnabled = true;
+                    chartArea.AxisX.ScaleView.Zoomable = true;
+                    chartArea.AxisY.ScaleView.Zoomable = true;
+                    chartArea.CursorX.AutoScroll = true;
+                    chartArea.CursorY.AutoScroll = true;
+                    chartArea.Name = "ChartArea1";
+                    newChart.ChartAreas.Add(chartArea);                    
+
+                    Legend legend1 = new Legend();
+                    legend1.Name = "Legend";
+                    newChart.Legends.Add(legend1);
+                    newChart.Location = new System.Drawing.Point(380 + 586, 69);
+                    //newChart.Dock = System.Windows.Forms.DockStyle.Fill;                    
+                    newChart.Visible = true;
+                    Controls.Add(newChart);
+                }
+            }                        
+        }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            classesMethods.getSkillOne(File.ReadAllLines(filePath).ToList());
         }
 
         private void mainDirectoryToolStripMenuItem_Click(object sender, EventArgs e)

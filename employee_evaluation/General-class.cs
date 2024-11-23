@@ -82,6 +82,48 @@ namespace employee_evaluation
             }
             return gradeContents;
         }                
+        
+        public string personInfo(List<string> employeeContent)
+        {
+            string personInfo = "";         
+            foreach(string employeeName in employeeContent)
+            {
+                string[] seperateName = employeeName.Split(',');
+                string[] getName = { string.Concat(seperateName[0], seperateName[2]) + "," };
+                personInfo += string.Concat(getName);
+                //MessageBox.Show(string.Join(",", personInfo));
+            }            
+            return personInfo;
+        }
+        public string getSkillOne(List<string> employeeContent)
+        {
+            string skillOne = "";
+            int length = 0;
+            foreach(string skillOneContent in employeeContent)
+            {
+                string[] seperateSkillOne = skillOneContent.Split(',');
+                string[] getSkillOne = { seperateSkillOne[3] };
+                length = getSkillOne.Length;
+                skillOne += string.Concat(getSkillOne) + ",";
+            }
+            //MessageBox.Show(skillOne);
+            return skillOne;
+        }
+
+        public string getSkillTwo(List<string> employeeContent)
+        {
+            string skills = "";
+            int length = 0;
+            foreach (string skillsContent in employeeContent)
+            {
+                string[] seperateSkillOne = skillsContent.Split(',');
+                string[] getSkillOne = { seperateSkillOne[4] };
+                length = getSkillOne.Length;
+                skills += string.Concat(getSkillOne) + ",";
+            }
+            //MessageBox.Show(skills);
+            return skills;
+        }
 
         public void createFile(string Path, List<string> contents)
         {           
