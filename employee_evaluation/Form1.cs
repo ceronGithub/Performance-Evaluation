@@ -35,7 +35,8 @@ namespace employee_evaluation
 
         private void Form1_Load(object sender, EventArgs e)
         {
-           
+            button3.Enabled = false;
+            button2.Enabled = false;
         }
 
         public string Reciever(string Fvalue, string Lvalue)
@@ -47,17 +48,29 @@ namespace employee_evaluation
 
         private void button1_Click(object sender, EventArgs e)
         {
-            // allow text, and excel file only
-            browseFile.Filter = "Document File |*.txt;*.xlsx";
-            // if click ok          
-            if(browseFile.ShowDialog() == DialogResult.OK)
+            if(textBox1.Text == "")
             {
-                // the path will show on the textbox
-                textBox1.Text = Path.GetFullPath(browseFile.FileName);
+                // allow text, and excel file only
+                browseFile.Filter = "Document File |*.txt;*.xlsx";
+                // if click ok          
+                if (browseFile.ShowDialog() == DialogResult.OK)
+                {
+                    // the path will show on the textbox
+                    textBox1.Text = Path.GetFullPath(browseFile.FileName);
 
-                // set the filepath into string
-                filePath = Path.GetFullPath(browseFile.FileName);
+                    // set the filepath into string
+                    filePath = Path.GetFullPath(browseFile.FileName);
+
+                    button1.Text = "reset";
+                    button3.Enabled = true; button2.Enabled = true;
+                }
             }
+            else
+            {                
+                this.Controls.Clear();
+                this.InitializeComponent();
+            }
+                   
         }
 
         private void button2_Click(object sender, EventArgs e)
@@ -78,30 +91,28 @@ namespace employee_evaluation
         {            
             string skillGradeOne = (classesMethods.getSkillOne(File.ReadAllLines(filePath).ToList()));
             string skillGradeTwo = (classesMethods.getSkillTwo(File.ReadAllLines(filePath).ToList()));
+            string skillGradeThree = (classesMethods.getSkillThree(File.ReadAllLines(filePath).ToList()));
+            string skillGradeFour = (classesMethods.getSkillFour(File.ReadAllLines(filePath).ToList()));
+            string skillGradeFive = (classesMethods.getSkillFive(File.ReadAllLines(filePath).ToList()));
+
             string personName = (classesMethods.personInfo(File.ReadAllLines(filePath).ToList()));
             
             string[] skillOneArray = { skillGradeOne };
             string[] skillTwoArray = { skillGradeTwo };
-            string[] skillThreeArray = { skillGradeOne };
-            string[] skillFourArray = { skillGradeOne };
-            string[] skillFiveArray = { skillGradeOne };
+            string[] skillThreeArray = { skillGradeThree };
+            string[] skillFourArray = { skillGradeFour };
+            string[] skillFiveArray = { skillGradeFive };
 
             string[] personNames = { personName };
 
-            foreach(string nameLabel in personNames)
-            {
-                string[] splitNameLabel = nameLabel.Split(',');
-                foreach (string skillOne in skillOneArray)
-                {
-                    string[] splitSkillOne = skillOne.Split(',');
-                    for (int i = 0; i < splitSkillOne.Length; i++)
-                    {
-                        chart1.Series["C#"].Points.AddXY(splitNameLabel[i], splitSkillOne[i]);                                       
-                    }
-                }                            
-            }
+            
+            int locCord0 = flatPointsCharts(personNames, skillOneArray, "C#", 0);
+            int locCord1 = flatPointsCharts(personNames, skillTwoArray, "Js", locCord0);
+            int locCord2 = flatPointsCharts(personNames, skillThreeArray, "CSS", locCord1);
+            int locCord3 = flatPointsCharts(personNames, skillFourArray, "HTML", locCord2);
+            int locCord4 = flatPointsCharts(personNames, skillFiveArray, "Laravel", locCord3);
 
-            flatPointsCharts(personNames, skillTwoArray, "CSS");
+            button3.Enabled = false;
         }
 
         private void button4_Click(object sender, EventArgs e)
@@ -131,8 +142,10 @@ namespace employee_evaluation
             this.Hide();
         }
 
-        public void flatPointsCharts(string[] personContent, string[] gradeContent, string seriesName)
+        public int flatPointsCharts(string[] personContent, string[] gradeContent, string seriesName, int locationCord)
         {
+            int locationCoordinates = locationCord == 0 ? locationCord = 12 : locationCord = locationCord + 586;
+                           
             foreach(string nameLabel in personContent)
             {
                 string[] splitNameLabel = nameLabel.Split(',');
@@ -140,6 +153,7 @@ namespace employee_evaluation
                 {
                     string[] splitSkill = gradeValue.Split(',');
 
+                    Random randomClr = new Random();
                     Chart newChart = new Chart();
                     newChart.Height = 300;
                     newChart.Width = 580;
@@ -147,7 +161,7 @@ namespace employee_evaluation
                     var series1 = new System.Windows.Forms.DataVisualization.Charting.Series
                     {
                         Name = seriesName,
-                        Color = System.Drawing.Color.Green,
+                        Color = Color.FromArgb(randomClr.Next(0, 255), randomClr.Next(0, 255), randomClr.Next(0,255)),//System.Drawing.Color.Green,
                         IsVisibleInLegend = true,
                         IsXValueIndexed = true,
                         ChartType = SeriesChartType.Column
@@ -172,12 +186,13 @@ namespace employee_evaluation
                     Legend legend1 = new Legend();
                     legend1.Name = "Legend";
                     newChart.Legends.Add(legend1);
-                    newChart.Location = new System.Drawing.Point(380 + 586, 69);
+                    newChart.Location = new System.Drawing.Point(locationCoordinates, 82);
                     //newChart.Dock = System.Windows.Forms.DockStyle.Fill;                    
                     newChart.Visible = true;
                     Controls.Add(newChart);
                 }
             }
+            return locationCoordinates;
         }
     }
 }

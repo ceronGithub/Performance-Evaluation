@@ -125,6 +125,51 @@ namespace employee_evaluation
             return skills;
         }
 
+        public string getSkillThree(List<string> employeeContent)
+        {
+            string skills = "";
+            int length = 0;
+            foreach (string skillsContent in employeeContent)
+            {
+                string[] seperateSkillOne = skillsContent.Split(',');
+                string[] getSkillOne = { seperateSkillOne[5] };
+                length = getSkillOne.Length;
+                skills += string.Concat(getSkillOne) + ",";
+            }
+            //MessageBox.Show(skills);
+            return skills;
+        }
+
+        public string getSkillFour(List<string> employeeContent)
+        {
+            string skills = "";
+            int length = 0;
+            foreach (string skillsContent in employeeContent)
+            {
+                string[] seperateSkillOne = skillsContent.Split(',');
+                string[] getSkillOne = { seperateSkillOne[6] };
+                length = getSkillOne.Length;
+                skills += string.Concat(getSkillOne) + ",";
+            }
+            //MessageBox.Show(skills);
+            return skills;
+        }
+
+        public string getSkillFive(List<string> employeeContent)
+        {
+            string skills = "";
+            int length = 0;
+            foreach (string skillsContent in employeeContent)
+            {
+                string[] seperateSkill = skillsContent.Split(',');
+                string[] getSkillGrade = { seperateSkill[7] };
+                length = getSkillGrade.Length;
+                skills += string.Concat(getSkillGrade) + ",";
+            }
+            //MessageBox.Show(skills);
+            return skills;
+        }
+
         public void createFile(string Path, List<string> contents)
         {           
            File.WriteAllLines(Path+"\\Evaluation.txt", contents);            
