@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 using System.Windows.Forms.DataVisualization.Charting;
+using System.Xml;
 
 namespace employee_evaluation
 {
@@ -86,6 +87,7 @@ namespace employee_evaluation
             string[] skillFiveArray = { skillGradeOne };
 
             string[] personNames = { personName };
+
             foreach(string nameLabel in personNames)
             {
                 string[] splitNameLabel = nameLabel.Split(',');
@@ -96,49 +98,10 @@ namespace employee_evaluation
                     {
                         chart1.Series["C#"].Points.AddXY(splitNameLabel[i], splitSkillOne[i]);                                       
                     }
-                }
+                }                            
+            }
 
-                foreach (string skillTwo in skillTwoArray)
-                {
-                    Chart newChart = new Chart();
-                    newChart.Height = 300;
-                    newChart.Width = 580;                    
-                    newChart.Series.Clear();
-                    var series1 = new System.Windows.Forms.DataVisualization.Charting.Series
-                    {                        
-                        Name = "Js",                        
-                        Color = System.Drawing.Color.Green,
-                        IsVisibleInLegend = true,
-                        IsXValueIndexed = true,                        
-                        ChartType = SeriesChartType.Column                 
-                    };                    
-                    newChart.Series.Add(series1);             
-                                    
-                    string[] splitSkill = skillTwo.Split(',');
-                    for (int i = 0; i < splitSkill.Length; i++)
-                    {                        
-                        series1.Points.AddXY(splitNameLabel[i], splitSkill[i]);
-                    }
-                    newChart.Invalidate();
-                    ChartArea chartArea = new ChartArea();
-                    chartArea.CursorX.IsUserEnabled = true;
-                    chartArea.CursorY.IsUserEnabled = true;
-                    chartArea.AxisX.ScaleView.Zoomable = true;
-                    chartArea.AxisY.ScaleView.Zoomable = true;
-                    chartArea.CursorX.AutoScroll = true;
-                    chartArea.CursorY.AutoScroll = true;
-                    chartArea.Name = "ChartArea1";
-                    newChart.ChartAreas.Add(chartArea);                    
-
-                    Legend legend1 = new Legend();
-                    legend1.Name = "Legend";
-                    newChart.Legends.Add(legend1);
-                    newChart.Location = new System.Drawing.Point(380 + 586, 69);
-                    //newChart.Dock = System.Windows.Forms.DockStyle.Fill;                    
-                    newChart.Visible = true;
-                    Controls.Add(newChart);
-                }
-            }                        
+            flatPointsCharts(personNames, skillTwoArray, "CSS");
         }
 
         private void button4_Click(object sender, EventArgs e)
@@ -166,6 +129,55 @@ namespace employee_evaluation
             Grading_System f2 = new Grading_System();
             f2.Show();
             this.Hide();
+        }
+
+        public void flatPointsCharts(string[] personContent, string[] gradeContent, string seriesName)
+        {
+            foreach(string nameLabel in personContent)
+            {
+                string[] splitNameLabel = nameLabel.Split(',');
+                foreach (string gradeValue in gradeContent)
+                {
+                    string[] splitSkill = gradeValue.Split(',');
+
+                    Chart newChart = new Chart();
+                    newChart.Height = 300;
+                    newChart.Width = 580;
+                    newChart.Series.Clear();
+                    var series1 = new System.Windows.Forms.DataVisualization.Charting.Series
+                    {
+                        Name = seriesName,
+                        Color = System.Drawing.Color.Green,
+                        IsVisibleInLegend = true,
+                        IsXValueIndexed = true,
+                        ChartType = SeriesChartType.Column
+                    };
+                    newChart.Series.Add(series1);
+                    
+                    for (int i = 0; i < splitSkill.Length; i++)
+                    {
+                        series1.Points.AddXY(splitNameLabel[i], splitSkill[i]);
+                    }
+                    newChart.Invalidate();
+                    ChartArea chartArea = new ChartArea();
+                    chartArea.CursorX.IsUserEnabled = true;
+                    chartArea.CursorY.IsUserEnabled = true;
+                    chartArea.AxisX.ScaleView.Zoomable = true;
+                    chartArea.AxisY.ScaleView.Zoomable = true;
+                    chartArea.CursorX.AutoScroll = true;
+                    chartArea.CursorY.AutoScroll = true;
+                    chartArea.Name = "ChartArea1";
+                    newChart.ChartAreas.Add(chartArea);
+
+                    Legend legend1 = new Legend();
+                    legend1.Name = "Legend";
+                    newChart.Legends.Add(legend1);
+                    newChart.Location = new System.Drawing.Point(380 + 586, 69);
+                    //newChart.Dock = System.Windows.Forms.DockStyle.Fill;                    
+                    newChart.Visible = true;
+                    Controls.Add(newChart);
+                }
+            }
         }
     }
 }
