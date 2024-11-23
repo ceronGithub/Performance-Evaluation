@@ -13,8 +13,7 @@ namespace employee_evaluation
     {
         // allow the user to browse files
         OpenFileDialog browseFile = new OpenFileDialog();
-
-        //string mainDefaultFilePath = @"" + Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + "\\Desktop\\Performance Output";
+       
         Path_class folderPath = new Path_class();
         string filePath;
         string gradingH = "0", gradingL = "0";
@@ -29,16 +28,20 @@ namespace employee_evaluation
 
         public Form1()
         {
-            InitializeComponent();            
+            InitializeComponent();      
+
+            // creates folder to desktop
             folderCreation.createDesktopFolder();
         }
 
         private void Form1_Load(object sender, EventArgs e)
         {
+            // button 2 & 3, is not clickable
             button3.Enabled = false;
             button2.Enabled = false;
         }
-
+        
+        // this function enables the form1 to recieve data from other form/s
         public string Reciever(string Fvalue, string Lvalue)
         {            
             gradingH = "" + Fvalue;
@@ -61,12 +64,15 @@ namespace employee_evaluation
                     // set the filepath into string
                     filePath = Path.GetFullPath(browseFile.FileName);
 
+
+                    // change the button1 text to reset if textbox1 is not null
                     button1.Text = "reset";
                     button3.Enabled = true; button2.Enabled = true;
                 }
             }
             else
             {                
+                // reset the form, to its original form
                 this.Controls.Clear();
                 this.InitializeComponent();
             }
@@ -87,8 +93,14 @@ namespace employee_evaluation
             classesMethods.createFile(folderPath.SubFolderPath(), contents);
             
         }
+
+        //this functions gets data from textfile
+        //gathered data from textfile will be plot into the charts
+        //it has a auto generated charts
         private void button3_Click(object sender, EventArgs e)
         {            
+
+            // store strings from other class
             string skillGradeOne = (classesMethods.getSkillOne(File.ReadAllLines(filePath).ToList()));
             string skillGradeTwo = (classesMethods.getSkillTwo(File.ReadAllLines(filePath).ToList()));
             string skillGradeThree = (classesMethods.getSkillThree(File.ReadAllLines(filePath).ToList()));
@@ -97,6 +109,7 @@ namespace employee_evaluation
 
             string personName = (classesMethods.personInfo(File.ReadAllLines(filePath).ToList()));
             
+            // convert string variable into an array string variable
             string[] skillOneArray = { skillGradeOne };
             string[] skillTwoArray = { skillGradeTwo };
             string[] skillThreeArray = { skillGradeThree };
@@ -105,7 +118,7 @@ namespace employee_evaluation
 
             string[] personNames = { personName };
 
-            
+            // auto generates charts
             int locCord0 = flatPointsCharts(personNames, skillOneArray, "C#", 0);
             int locCord1 = flatPointsCharts(personNames, skillTwoArray, "Js", locCord0);
             int locCord2 = flatPointsCharts(personNames, skillThreeArray, "CSS", locCord1);
@@ -144,15 +157,22 @@ namespace employee_evaluation
 
         public int flatPointsCharts(string[] personContent, string[] gradeContent, string seriesName, int locationCord)
         {
+            // if-else statements
             int locationCoordinates = locationCord == 0 ? locationCord = 12 : locationCord = locationCord + 586;
                            
+            // run thru the persoContentArray collection
             foreach(string nameLabel in personContent)
             {
+                //split each array into an objects
                 string[] splitNameLabel = nameLabel.Split(',');
+
+                // run thru the gradeContentArray collection
                 foreach (string gradeValue in gradeContent)
                 {
+                    //split each array into an objects
                     string[] splitSkill = gradeValue.Split(',');
 
+                    // chart creation
                     Random randomClr = new Random();
                     Chart newChart = new Chart();
                     newChart.Height = 300;
