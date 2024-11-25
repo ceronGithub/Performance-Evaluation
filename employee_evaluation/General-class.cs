@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -49,6 +50,8 @@ namespace employee_evaluation
             return contents;
         }
 
+
+
         public string skillsGrade(List<string> employeeContent)
         {
             string gradeContents = "";
@@ -86,7 +89,7 @@ namespace employee_evaluation
         public string personInfo(List<string> employeeContent)
         {
             string personInfo = "";         
-            foreach(string employeeName in employeeContent)
+            foreach(string employeeName in employeeContent.Skip(1))
             {
                 string[] seperateName = employeeName.Split(',');
                 string[] getName = { string.Concat(seperateName[0], seperateName[2]) + "," };
@@ -95,31 +98,35 @@ namespace employee_evaluation
             }            
             return personInfo;
         }
+       
         public string getSkillOne(List<string> employeeContent)
         {
-            string skillOne = "";
-            int length = 0;
-            foreach(string skillOneContent in employeeContent)
+            string skillOne = "";            
+            
+            // skip = skip some sequence from List<T> collection
+            foreach (string skillsContent in employeeContent.Skip(1))
             {
-                string[] seperateSkillOne = skillOneContent.Split(',');
-                string[] getSkillOne = { seperateSkillOne[3] };
-                length = getSkillOne.Length;
-                skillOne += string.Concat(getSkillOne) + ",";
+                // split the List<T> collection into many sequence
+                // sample : List<T> arrayCollection = firstname, middlename,...
+                // take the firstname and equals it into, seperateSkill[0] = firstname
+                // seperateSkill = nameoftheArrayVariable, [0] = index
+                string[] seperateSkill = skillsContent.Split(',');
+                // get the inde
+                string[] getSkill = { seperateSkill[3] };                               
+                skillOne += string.Concat(getSkill) + ",";
             }
-            //MessageBox.Show(skillOne);
+            //MessageBox.Show(string.Concat(employeeContent.Skip(1)));
             return skillOne;
         }
 
         public string getSkillTwo(List<string> employeeContent)
         {
-            string skills = "";
-            int length = 0;
-            foreach (string skillsContent in employeeContent)
+            string skills = "";            
+            foreach (string skillsContent in employeeContent.Skip(1))
             {
                 string[] seperateSkillOne = skillsContent.Split(',');
-                string[] getSkillOne = { seperateSkillOne[4] };
-                length = getSkillOne.Length;
-                skills += string.Concat(getSkillOne) + ",";
+                string[] getSkill = { seperateSkillOne[4] };              
+                skills += string.Concat(getSkill) + ",";
             }
             //MessageBox.Show(skills);
             return skills;
@@ -127,14 +134,12 @@ namespace employee_evaluation
 
         public string getSkillThree(List<string> employeeContent)
         {
-            string skills = "";
-            int length = 0;
-            foreach (string skillsContent in employeeContent)
+            string skills = "";            
+            foreach (string skillsContent in employeeContent.Skip(1))
             {
                 string[] seperateSkillOne = skillsContent.Split(',');
-                string[] getSkillOne = { seperateSkillOne[5] };
-                length = getSkillOne.Length;
-                skills += string.Concat(getSkillOne) + ",";
+                string[] getSkill = { seperateSkillOne[5] };                
+                skills += string.Concat(getSkill) + ",";
             }
             //MessageBox.Show(skills);
             return skills;
@@ -142,14 +147,12 @@ namespace employee_evaluation
 
         public string getSkillFour(List<string> employeeContent)
         {
-            string skills = "";
-            int length = 0;
-            foreach (string skillsContent in employeeContent)
+            string skills = "";            
+            foreach (string skillsContent in employeeContent.Skip(1))
             {
                 string[] seperateSkillOne = skillsContent.Split(',');
-                string[] getSkillOne = { seperateSkillOne[6] };
-                length = getSkillOne.Length;
-                skills += string.Concat(getSkillOne) + ",";
+                string[] getSkill = { seperateSkillOne[6] };                
+                skills += string.Concat(getSkill) + ",";
             }
             //MessageBox.Show(skills);
             return skills;
@@ -157,17 +160,21 @@ namespace employee_evaluation
 
         public string getSkillFive(List<string> employeeContent)
         {
-            string skills = "";
-            int length = 0;
-            foreach (string skillsContent in employeeContent)
+            string skills = "";            
+            foreach (string skillsContent in employeeContent.Skip(1))
             {
                 string[] seperateSkill = skillsContent.Split(',');
-                string[] getSkillGrade = { seperateSkill[7] };
-                length = getSkillGrade.Length;
-                skills += string.Concat(getSkillGrade) + ",";
+                string[] getSkill = { seperateSkill[7] };                
+                skills += string.Concat(getSkill) + ",";
             }
             //MessageBox.Show(skills);
             return skills;
+        }
+
+        public List<string> headerLabel(List<string> headerContent)
+        {
+            //MessageBox.Show(string.Concat(headerContent.Take(1)));
+            return headerContent.Take(1).ToList();
         }
 
         public void createFile(string Path, List<string> contents)

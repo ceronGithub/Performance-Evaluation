@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Windows.Forms;
 using System.Windows.Forms.DataVisualization.Charting;
 using System.Xml;
@@ -101,6 +102,7 @@ namespace employee_evaluation
         {            
 
             // store strings from other class
+            string headerLabel = (classesMethods.getSkillOne(File.ReadAllLines(filePath).ToList()));
             string skillGradeOne = (classesMethods.getSkillOne(File.ReadAllLines(filePath).ToList()));
             string skillGradeTwo = (classesMethods.getSkillTwo(File.ReadAllLines(filePath).ToList()));
             string skillGradeThree = (classesMethods.getSkillThree(File.ReadAllLines(filePath).ToList()));
@@ -117,20 +119,27 @@ namespace employee_evaluation
             string[] skillFiveArray = { skillGradeFive };
 
             string[] personNames = { personName };
+            
+            List<string> headerSkillLabel = classesMethods.headerLabel(File.ReadAllLines(filePath).ToList());
 
-            // auto generates charts
-            int locCord0 = flatPointsCharts(personNames, skillOneArray, "C#", 0);
-            int locCord1 = flatPointsCharts(personNames, skillTwoArray, "Js", locCord0);
-            int locCord2 = flatPointsCharts(personNames, skillThreeArray, "CSS", locCord1);
-            int locCord3 = flatPointsCharts(personNames, skillFourArray, "HTML", locCord2);
-            int locCord4 = flatPointsCharts(personNames, skillFiveArray, "Laravel", locCord3);
+            foreach (string Labels in headerSkillLabel)
+            {
+                string[] splitHeaderIntoLabel = Labels.Split(',');
+                // auto generates charts
+                int locCord0 = flatPointsCharts(personNames, skillOneArray, "-" + splitHeaderIntoLabel[3], 0);
+                int locCord1 = flatPointsCharts(personNames, skillTwoArray, "-" + splitHeaderIntoLabel[4], locCord0);
+                int locCord2 = flatPointsCharts(personNames, skillThreeArray, "-" + splitHeaderIntoLabel[5], locCord1);
+                int locCord3 = flatPointsCharts(personNames, skillFourArray, "-" + splitHeaderIntoLabel[6], locCord2);
+                int locCord4 = flatPointsCharts(personNames, skillFiveArray, "-" + splitHeaderIntoLabel[7], locCord3);
+
+            }
 
             button3.Enabled = false;
         }
 
         private void button4_Click(object sender, EventArgs e)
         {
-            classesMethods.getSkillOne(File.ReadAllLines(filePath).ToList());
+            classesMethods.headerLabel(File.ReadAllLines(filePath).ToList());
         }
 
         private void mainDirectoryToolStripMenuItem_Click(object sender, EventArgs e)
@@ -170,16 +179,15 @@ namespace employee_evaluation
                 foreach (string gradeValue in gradeContent)
                 {
                     //split each array into an objects
-                    string[] splitSkill = gradeValue.Split(',');
-
+                    string[] splitSkill = gradeValue.Split(',');                   
                     // chart creation
                     Random randomClr = new Random();
                     Chart newChart = new Chart();
                     newChart.Height = 300;
                     newChart.Width = 580;
-                    newChart.Series.Clear();
+                    newChart.Series.Clear();                    
                     var series1 = new System.Windows.Forms.DataVisualization.Charting.Series
-                    {
+                    {                        
                         Name = seriesName,
                         Color = Color.FromArgb(randomClr.Next(0, 255), randomClr.Next(0, 255), randomClr.Next(0,255)),//System.Drawing.Color.Green,
                         IsVisibleInLegend = true,
