@@ -167,7 +167,7 @@ namespace employee_evaluation
         public int flatPointsCharts(string[] personContent, string[] gradeContent, string seriesName, int locationCord)
         {
             // if-else statements
-            int locationCoordinates = locationCord == 0 ? locationCord = 12 : locationCord = locationCord + 586;
+            int locationCoordinates = locationCord == 0 ? locationCord = 76 : locationCord = locationCord + 306;
                            
             // run thru the persoContentArray collection
             foreach(string nameLabel in personContent)
@@ -179,12 +179,12 @@ namespace employee_evaluation
                 foreach (string gradeValue in gradeContent)
                 {
                     //split each array into an objects
-                    string[] splitSkill = gradeValue.Split(',');                   
+                    string[] splitSkill = gradeValue.Split(',');                 
                     // chart creation
                     Random randomClr = new Random();
                     Chart newChart = new Chart();
                     newChart.Height = 300;
-                    newChart.Width = 580;
+                    newChart.Width = 900;
                     newChart.Series.Clear();                    
                     var series1 = new System.Windows.Forms.DataVisualization.Charting.Series
                     {                        
@@ -202,19 +202,28 @@ namespace employee_evaluation
                     }
                     newChart.Invalidate();
                     ChartArea chartArea = new ChartArea();
-                    chartArea.CursorX.IsUserEnabled = true;
-                    chartArea.CursorY.IsUserEnabled = true;
-                    chartArea.AxisX.ScaleView.Zoomable = true;
-                    chartArea.AxisY.ScaleView.Zoomable = true;
-                    chartArea.CursorX.AutoScroll = true;
-                    chartArea.CursorY.AutoScroll = true;
+                    //chartArea.CursorX.IsUserEnabled = true;
+                    //chartArea.CursorY.IsUserEnabled = true;
+                    //chartArea.AxisX.ScaleView.Zoomable = true;
+                    //chartArea.AxisY.ScaleView.Zoomable = true;
+                    //chartArea.CursorX.AutoScroll = true;
+                    //chartArea.CursorY.AutoScroll = true;
+                    chartArea.AxisX.ScaleView.Zoom(0, 8);
+                    chartArea.AxisX.ScaleView.MinSize = 0;
+                    chartArea.AxisX.ScrollBar.Enabled = true;                    
+                    chartArea.AxisX.ScrollBar.IsPositionedInside = true;
+                    chartArea.AxisX.ScrollBar.Size = 20;
+                    chartArea.AxisX.ScrollBar.ButtonColor = Color.Silver;
+                    chartArea.AxisX.ScrollBar.LineColor = Color.Black;
+                    //chartArea.AxisY.ScrollBar.Enabled = true;
+                    //chartArea.AxisX.IsLabelAutoFit = true;
                     chartArea.Name = "ChartArea1";
                     newChart.ChartAreas.Add(chartArea);
 
                     Legend legend1 = new Legend();
                     legend1.Name = "Legend";
                     newChart.Legends.Add(legend1);
-                    newChart.Location = new System.Drawing.Point(locationCoordinates, 82);
+                    newChart.Location = new System.Drawing.Point(0,locationCoordinates);
                     //newChart.Dock = System.Windows.Forms.DockStyle.Fill;                    
                     newChart.Visible = true;
                     Controls.Add(newChart);
