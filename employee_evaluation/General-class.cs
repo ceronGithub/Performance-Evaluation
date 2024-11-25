@@ -49,9 +49,6 @@ namespace employee_evaluation
             // return the list content array
             return contents;
         }
-
-
-
         public string skillsGrade(List<string> employeeContent)
         {
             string gradeContents = "";
@@ -171,10 +168,21 @@ namespace employee_evaluation
             return skills;
         }
 
-        public List<string> headerLabel(List<string> headerContent)
+        public List<string> headerSkillLabel(List<string> headerContent)
         {
             //MessageBox.Show(string.Concat(headerContent.Take(1)));
             return headerContent.Take(1).ToList();
+        }
+
+        public List<string> countSkillLabel(List<string> headerContent)
+        {
+            foreach(string item in headerContent.Take(1))
+            {
+                string[] splitHeaders = item.Split(',');
+                List<string> skipLabel = splitHeaders.Skip(3).ToList();
+                MessageBox.Show(string.Concat(skipLabel.Count));
+            }            
+            return headerContent;
         }
 
         public void createFile(string Path, List<string> contents)

@@ -120,7 +120,7 @@ namespace employee_evaluation
 
             string[] personNames = { personName };
             
-            List<string> headerSkillLabel = classesMethods.headerLabel(File.ReadAllLines(filePath).ToList());
+            List<string> headerSkillLabel = classesMethods.headerSkillLabel(File.ReadAllLines(filePath).ToList());
 
             foreach (string Labels in headerSkillLabel)
             {
@@ -139,7 +139,7 @@ namespace employee_evaluation
 
         private void button4_Click(object sender, EventArgs e)
         {
-            classesMethods.headerLabel(File.ReadAllLines(filePath).ToList());
+            classesMethods.countSkillLabel(File.ReadAllLines(filePath).ToList());
         }
 
         private void mainDirectoryToolStripMenuItem_Click(object sender, EventArgs e)
