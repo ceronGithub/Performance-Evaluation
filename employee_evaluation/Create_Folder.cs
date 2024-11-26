@@ -39,7 +39,19 @@ namespace employee_evaluation
                 // MessageBox.Show("Folder is existing!");
             }
             //return subFolder;
+        }
 
+        public void ReadMe()
+        {
+            string readMeFolder = folderPath.ReadMeFolderPath();
+            if (!Directory.Exists(folderPath.ReadMeFolderPath()))
+            {
+                Directory.CreateDirectory(folderPath.ReadMeFolderPath());
+            }
+            else
+            {
+                // MessageBox.Show("Folder is existing!");
+            }
         }
     }
 }

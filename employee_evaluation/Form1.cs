@@ -6,6 +6,7 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.Remoting.Contexts;
 using System.Security.Cryptography;
 using System.Windows.Forms;
 using System.Windows.Forms.DataVisualization.Charting;
@@ -32,10 +33,16 @@ namespace employee_evaluation
 
         public Form1()
         {
-            InitializeComponent();      
+            InitializeComponent();
 
             // creates folder to desktop
             folderCreation.createDesktopFolder();
+            // creates a subFolder named:readme
+            folderCreation.ReadMe();
+            //creates a file in the subfolder readme
+            classesMethods.readMe5Instucrtion(folderPath.ReadMeFolderPath());
+            classesMethods.readMeMoreThan5Instucrtion(folderPath.ReadMeFolderPath());
+            classesMethods.readMeMoreInformation(folderPath.ReadMeFolderPath());
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -154,7 +161,7 @@ namespace employee_evaluation
             {
                 for (int i = 1; i < countSkillLabel; i++)
                 {
-                    MessageBox.Show("" + i);
+                    // every loop the skillGrade from text is stored into the skillArray variable as an array
                     skillArray[i] = (classesMethods.autoGetSkillGrade(File.ReadAllLines(filePath).ToList(), i));                    
                     string personName = (classesMethods.personInfo(File.ReadAllLines(filePath).ToList()));
                     string[] personNames = { personName };
@@ -163,8 +170,7 @@ namespace employee_evaluation
 
                     foreach (string Labels in headerSkillLabel)
                     {
-                        string[] splitHeaderIntoLabel = Labels.Split(',');
-                        //MessageBox.Show("index : " + locCord[i]);
+                        string[] splitHeaderIntoLabel = Labels.Split(',');                        
                         // auto generates charts
                         if(LocCord == 0)
                         {

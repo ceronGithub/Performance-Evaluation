@@ -12,7 +12,7 @@ namespace employee_evaluation
         string mainFolderPath = @""+ Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + "\\Desktop\\Report";
 
         //string subFolderPath = @"C:\Desktop\Reports\"+ DateTime.Now.ToString("MM-dd-yyyy")+"\\Evaluation";
-        string subFolderPath;
+        string subFolderPath, readMeFolderPath;
 
         public string MainFolderPath ()
         {
@@ -22,6 +22,11 @@ namespace employee_evaluation
         public string SubFolderPath()
         {
             return subFolderPath = mainFolderPath + "\\Evaluation - " + DateTime.Now.ToString("MM-dd-yyyy");
+        }
+
+        public string ReadMeFolderPath()
+        {
+            return readMeFolderPath = mainFolderPath + "\\ReadMe";
         }
     }
 }

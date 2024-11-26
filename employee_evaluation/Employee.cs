@@ -21,6 +21,8 @@ namespace employee_evaluation
             Over_All_Skill = over_All_Skill;
         }
 
+        // automatic property
+        // similar to private string Firstname;
         public string FirstName { get; set; }
         public string MiddleName { get; set; }
         public string LastName { get; set; }

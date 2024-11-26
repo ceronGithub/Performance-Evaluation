@@ -217,5 +217,32 @@ namespace employee_evaluation
            File.WriteAllLines(Path+"\\Evaluation.txt", contents);            
            MessageBox.Show("File has been created. File can be viewed @ \n" + Path);
         }
+
+        public void readMe5Instucrtion(string Path)
+        {
+            StreamWriter create5SkillText = new StreamWriter(Path+"\\5Skills.txt");
+            create5SkillText.Write("First Name, Middle Name, Last Name, SkillOne, SkillTwo, SkillThree, SkillFour, SkillFive");
+            create5SkillText.Write("\n" + "sample,sample,sample,5,5,5,5,5");
+            create5SkillText.Write("\n" + "follow,this,exact sample,1,1,1,1,1");
+            create5SkillText.Close();
+        }
+
+        public void readMeMoreThan5Instucrtion(string Path)
+        {
+            StreamWriter create5SkillText = new StreamWriter(Path + "\\MoreThan5Skills.txt");
+            create5SkillText.Write("First Name, Middle Name, Last Name, SkillOne, SkillTwo, SkillThree, SkillFour, SkillFive, SkillSix, SkillSeven, SkillEight, SkillNine, SkillTen");
+            create5SkillText.Write("\n" + "sample,sample,sample,5,5,5,5,5,5,5,5,5,5");
+            create5SkillText.Write("\n" + "follow,this,exact sample,1,1,1,1,1,1,1,1,1,1");
+            create5SkillText.Close();
+        }
+
+        public void readMeMoreInformation(string Path)
+        {
+            StreamWriter create5SkillText = new StreamWriter(Path + "\\Contact.txt");
+            create5SkillText.Write("This is just for demo. \n and i will stop the develop from here ;p. \n if you are interested you may contact me on the following...\n" +
+                "Viber / Telegram : +639668829302" +
+                "\n Skype : calsena.skype@gmail.com");
+            create5SkillText.Close();
+        }
     }
 }
