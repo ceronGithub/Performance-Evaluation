@@ -161,7 +161,7 @@ namespace employee_evaluation
             foreach (string skillsContent in employeeContent.Skip(1))
             {
                 string[] seperateSkill = skillsContent.Split(',');
-                string[] getSkill = { seperateSkill[7] };                
+                string[] getSkill = { seperateSkill[7] };               
                 skills += string.Concat(getSkill) + ",";
             }
             //MessageBox.Show(skills);
@@ -170,19 +170,46 @@ namespace employee_evaluation
 
         public List<string> headerSkillLabel(List<string> headerContent)
         {
-            //MessageBox.Show(string.Concat(headerContent.Take(1)));
+            MessageBox.Show(string.Concat(headerContent.Take(1)));
             return headerContent.Take(1).ToList();
         }
-
-        public List<string> countSkillLabel(List<string> headerContent)
+        public List<string> autoHeaderSkillLabel(List<string> headerContent)
         {
+            List<string> getHeaderLabel = new List<string>();
+            foreach (string item in headerContent.Take(1).ToList())
+            {
+                string[] splitHeaders = item.Split(',').Skip(2).ToArray();
+                string putComma = string.Join(",", splitHeaders);
+                getHeaderLabel.Add(putComma);                
+            }            
+            return getHeaderLabel;
+        }
+
+        public int countSkillLabel(List<string> headerContent)
+        {
+            int lengthItem = 0;
             foreach(string item in headerContent.Take(1))
             {
                 string[] splitHeaders = item.Split(',');
                 List<string> skipLabel = splitHeaders.Skip(3).ToList();
-                MessageBox.Show(string.Concat(skipLabel.Count));
+                lengthItem = skipLabel.Count;
+                //MessageBox.Show(string.Concat(skipLabel.Count));
             }            
-            return headerContent;
+            return lengthItem;
+        }
+
+        public string autoGetSkillGrade(List<string> employeeContent, int itemIndex)
+        {
+            string skillsGrades = "";
+            foreach (string skillsContent in employeeContent.Skip(1))
+            {
+                // skips the 0-2 index of array
+                string[] seperateSkillContent = skillsContent.Split(',').Skip(2).ToArray();
+                string[] getSkillsGrades = { seperateSkillContent[itemIndex] };
+                skillsGrades += string.Join(",",getSkillsGrades) + ",";
+            }
+            //MessageBox.Show(skillsGrades);
+            return skillsGrades;
         }
 
         public void createFile(string Path, List<string> contents)

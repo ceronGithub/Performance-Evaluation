@@ -57,7 +57,7 @@
             // textBox1
             // 
             this.textBox1.Enabled = false;
-            this.textBox1.Location = new System.Drawing.Point(103, 33);
+            this.textBox1.Location = new System.Drawing.Point(93, 33);
             this.textBox1.Name = "textBox1";
             this.textBox1.Size = new System.Drawing.Size(250, 20);
             this.textBox1.TabIndex = 2;
@@ -129,7 +129,7 @@
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(468, 31);
+            this.button2.Location = new System.Drawing.Point(598, 31);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(75, 23);
             this.button2.TabIndex = 5;
@@ -139,21 +139,21 @@
             // 
             // button3
             // 
-            this.button3.Location = new System.Drawing.Point(378, 31);
+            this.button3.Location = new System.Drawing.Point(358, 31);
             this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(75, 23);
+            this.button3.Size = new System.Drawing.Size(117, 23);
             this.button3.TabIndex = 10;
-            this.button3.Text = "Summarize";
+            this.button3.Text = "Summarize 5 skills";
             this.button3.UseVisualStyleBackColor = true;
             this.button3.Click += new System.EventHandler(this.button3_Click);
             // 
             // button4
             // 
-            this.button4.Location = new System.Drawing.Point(559, 31);
+            this.button4.Location = new System.Drawing.Point(481, 31);
             this.button4.Name = "button4";
-            this.button4.Size = new System.Drawing.Size(75, 23);
+            this.button4.Size = new System.Drawing.Size(111, 23);
             this.button4.TabIndex = 14;
-            this.button4.Text = "button4";
+            this.button4.Text = "Summarize +5 skills";
             this.button4.UseVisualStyleBackColor = true;
             this.button4.Click += new System.EventHandler(this.button4_Click);
             // 

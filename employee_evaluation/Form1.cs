@@ -1,8 +1,11 @@
 ﻿using System;
+using System.CodeDom;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Security.Cryptography;
 using System.Windows.Forms;
 using System.Windows.Forms.DataVisualization.Charting;
@@ -81,7 +84,7 @@ namespace employee_evaluation
         }
 
         private void button2_Click(object sender, EventArgs e)
-        {
+        {            
             // locates the textfile and read its whole content.
             // and stores its content to a list. a list is where you can store texts in an array form.
             List<string> contents = classesMethods.makeEmployeeAsObject(File.ReadAllLines(filePath).ToList());
@@ -99,47 +102,89 @@ namespace employee_evaluation
         //gathered data from textfile will be plot into the charts
         //it has a auto generated charts
         private void button3_Click(object sender, EventArgs e)
-        {            
+        {
 
-            // store strings from other class
-            string headerLabel = (classesMethods.getSkillOne(File.ReadAllLines(filePath).ToList()));
-            string skillGradeOne = (classesMethods.getSkillOne(File.ReadAllLines(filePath).ToList()));
-            string skillGradeTwo = (classesMethods.getSkillTwo(File.ReadAllLines(filePath).ToList()));
-            string skillGradeThree = (classesMethods.getSkillThree(File.ReadAllLines(filePath).ToList()));
-            string skillGradeFour = (classesMethods.getSkillFour(File.ReadAllLines(filePath).ToList()));
-            string skillGradeFive = (classesMethods.getSkillFive(File.ReadAllLines(filePath).ToList()));
+            MessageBox.Show("this only accepts 5 skills", MessageBoxIcon.Warning + "Note!", MessageBoxButtons.OK);
 
-            string personName = (classesMethods.personInfo(File.ReadAllLines(filePath).ToList()));
+            // this counts how many skillLabel are registered
+            int countSkillLabel = classesMethods.countSkillLabel(File.ReadAllLines(filePath).ToList());
+            if(countSkillLabel <= 6)
+            {            
+                // store strings from other class                
+                string skillGradeOne = (classesMethods.getSkillOne(File.ReadAllLines(filePath).ToList()));
+                string skillGradeTwo = (classesMethods.getSkillTwo(File.ReadAllLines(filePath).ToList()));
+                string skillGradeThree = (classesMethods.getSkillThree(File.ReadAllLines(filePath).ToList()));
+                string skillGradeFour = (classesMethods.getSkillFour(File.ReadAllLines(filePath).ToList()));
+                string skillGradeFive = (classesMethods.getSkillFive(File.ReadAllLines(filePath).ToList()));
+
+                string personName = (classesMethods.personInfo(File.ReadAllLines(filePath).ToList()));
             
-            // convert string variable into an array string variable
-            string[] skillOneArray = { skillGradeOne };
-            string[] skillTwoArray = { skillGradeTwo };
-            string[] skillThreeArray = { skillGradeThree };
-            string[] skillFourArray = { skillGradeFour };
-            string[] skillFiveArray = { skillGradeFive };
+                // convert string variable into an array string variable
+                string[] skillOneArray = { skillGradeOne };
+                string[] skillTwoArray = { skillGradeTwo };
+                string[] skillThreeArray = { skillGradeThree };
+                string[] skillFourArray = { skillGradeFour };
+                string[] skillFiveArray = { skillGradeFive };
 
-            string[] personNames = { personName };
+                string[] personNames = { personName };
             
-            List<string> headerSkillLabel = classesMethods.headerSkillLabel(File.ReadAllLines(filePath).ToList());
+                List<string> headerSkillLabel = classesMethods.headerSkillLabel(File.ReadAllLines(filePath).ToList());
 
-            foreach (string Labels in headerSkillLabel)
-            {
-                string[] splitHeaderIntoLabel = Labels.Split(',');
-                // auto generates charts
-                int locCord0 = flatPointsCharts(personNames, skillOneArray, "-" + splitHeaderIntoLabel[3], 0);
-                int locCord1 = flatPointsCharts(personNames, skillTwoArray, "-" + splitHeaderIntoLabel[4], locCord0);
-                int locCord2 = flatPointsCharts(personNames, skillThreeArray, "-" + splitHeaderIntoLabel[5], locCord1);
-                int locCord3 = flatPointsCharts(personNames, skillFourArray, "-" + splitHeaderIntoLabel[6], locCord2);
-                int locCord4 = flatPointsCharts(personNames, skillFiveArray, "-" + splitHeaderIntoLabel[7], locCord3);
-
+                foreach (string Labels in headerSkillLabel)
+                {
+                    string[] splitHeaderIntoLabel = Labels.Split(',');
+                    // auto generates charts
+                    int locCord0 = flatPointsCharts(personNames, skillOneArray, "-" + splitHeaderIntoLabel[3], 0);
+                    int locCord1 = flatPointsCharts(personNames, skillTwoArray, "-" + splitHeaderIntoLabel[4], locCord0);
+                    int locCord2 = flatPointsCharts(personNames, skillThreeArray, "-" + splitHeaderIntoLabel[5], locCord1);
+                    int locCord3 = flatPointsCharts(personNames, skillFourArray, "-" + splitHeaderIntoLabel[6], locCord2);
+                    int locCord4 = flatPointsCharts(personNames, skillFiveArray, "-" + splitHeaderIntoLabel[7], locCord3);
+                }
+                button3.Enabled = false;
             }
-
-            button3.Enabled = false;
         }
 
         private void button4_Click(object sender, EventArgs e)
         {
-            classesMethods.countSkillLabel(File.ReadAllLines(filePath).ToList());
+            int countSkillLabel = classesMethods.countSkillLabel(File.ReadAllLines(filePath).ToList());            
+            string[] skillArray = new string[countSkillLabel];
+            int LocCord = 0;
+            string[] headerLabels = new string[countSkillLabel];       
+            if (countSkillLabel >= 7)
+            {
+                for (int i = 1; i < countSkillLabel; i++)
+                {
+                    MessageBox.Show("" + i);
+                    skillArray[i] = (classesMethods.autoGetSkillGrade(File.ReadAllLines(filePath).ToList(), i));                    
+                    string personName = (classesMethods.personInfo(File.ReadAllLines(filePath).ToList()));
+                    string[] personNames = { personName };
+                    
+                    List<string> headerSkillLabel = classesMethods.autoHeaderSkillLabel(File.ReadAllLines(filePath).ToList());                    
+
+                    foreach (string Labels in headerSkillLabel)
+                    {
+                        string[] splitHeaderIntoLabel = Labels.Split(',');
+                        //MessageBox.Show("index : " + locCord[i]);
+                        // auto generates charts
+                        if(LocCord == 0)
+                        {
+                           // locCord = 0;
+                           LocCord = flatPointsCharts(personNames, new string[] { skillArray[i] }, "-" + splitHeaderIntoLabel[i], 0);
+                        }
+                        else if(LocCord == 76)
+                        {
+                            // locCord = 76
+                            LocCord = flatPointsCharts(personNames, new string[] { skillArray[i] }, "-" + splitHeaderIntoLabel[i], 76);                            
+                        }
+                        else if(LocCord != 76)
+                        {
+                            //locCord = 306;                            
+                            LocCord = flatPointsCharts(personNames, new string[] { skillArray[i] }, "-" + splitHeaderIntoLabel[i], LocCord);
+                        }
+                        
+                    }
+                }
+            }    
         }
 
         private void mainDirectoryToolStripMenuItem_Click(object sender, EventArgs e)
@@ -165,17 +210,18 @@ namespace employee_evaluation
         }
 
         public int flatPointsCharts(string[] personContent, string[] gradeContent, string seriesName, int locationCord)
-        {
+        {            
             // if-else statements
-            int locationCoordinates = locationCord == 0 ? locationCord = 76 : locationCord = locationCord + 306;
-                           
+            int locationCoordinates = locationCord == 0 ? locationCord = 76 
+                : locationCord == 76 ? locationCord += 306
+                : locationCord = locationCord + 306;            
+
             // run thru the persoContentArray collection
-            foreach(string nameLabel in personContent)
+            foreach (string nameLabel in personContent)
             {
                 //split each array into an objects
                 string[] splitNameLabel = nameLabel.Split(',');
-
-                // run thru the gradeContentArray collection
+                                // run thru the gradeContentArray collection
                 foreach (string gradeValue in gradeContent)
                 {
                     //split each array into an objects
@@ -189,7 +235,7 @@ namespace employee_evaluation
                     var series1 = new System.Windows.Forms.DataVisualization.Charting.Series
                     {                        
                         Name = seriesName,
-                        Color = Color.FromArgb(randomClr.Next(0, 255), randomClr.Next(0, 255), randomClr.Next(0,255)),//System.Drawing.Color.Green,
+                        Color = Color.FromArgb(randomClr.Next(0, 255), randomClr.Next(0, 255), randomClr.Next(0,255)),
                         IsVisibleInLegend = true,
                         IsXValueIndexed = true,
                         ChartType = SeriesChartType.Column
