@@ -3,10 +3,13 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Security.AccessControl;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Windows.Forms.DataVisualization.Charting;
+using System.Windows.Forms.VisualStyles;
 using static System.Windows.Forms.LinkLabel;
 
 namespace employee_evaluation
@@ -26,29 +29,106 @@ namespace employee_evaluation
             return String.Join("", output);
         }
         
-        public List<string> makeEmployeeAsObject(List<string> value)
+        public List<string> exportToTextFile(List<string> value)
         {
             // this calls the Employee class
             List<Employee> listOfEmployee = new List<Employee>();
 
             // create a new list
+            List<string> headerContent = new List<string>();
+            List<string> personContent = new List<string>();
+            List<string> gradingContent = new List<string>();
             List<string> contents = new List<string>();
-
-            // read each value that has been passed
-            foreach(string person in value)
+            
+            // header value
+            foreach(string Info in value.Take(1))
             {
-                // this removes the comma to the text file
-                string[] items = person.Split(',');
+                // this removes the comma to the value
+                string[] items = Info.Split(',');
 
-                // employee is a constructor
-                Employee personInfo = new Employee(items[0], items[1], items[2], items[3], items[4], items[5], items[6], items[7], items[8]);
+                // adds a comma in between header
+                string addSeperator = string.Join(",", items);
+                
+                // convert string into a list
+                headerContent.Add(addSeperator);
+            }
+            // person Name value
+            foreach(string Info in value.Skip(1))
+            {
+                // this removes the comma to the value
+                string[] items = Info.Split(',');
 
-                // addes the persons into a new list
-                contents.Add(personInfo.ToString());
+                // adds a comma in between header
+                string addSeperator = string.Join(",", items.Take(3));
+
+                // convert string into a list
+                personContent.Add(addSeperator);                
+            }
+            // grade value
+            foreach (string Info in value.Skip(1))
+            {
+                // this removes the comma to the value
+                string[] items = Info.Split(',');
+
+                // adds a comma in between header
+                string addSeperator = string.Join(",", items.Skip(3));
+
+                // convert string into a list
+                gradingContent.Add(addSeperator);
             }            
+
+            // employee is a constructor
+            Employee personInfo = new Employee(headerContent, personContent, gradingContent);
+            
+            // addes the persons into a new list
+            contents.Add(personInfo.ToString());
             // return the list content array
+
             return contents;
         }
+        /*
+        public List<string> makeEmployeeAsObjectMoreThan5Skills(List<string> value)
+        {           
+            // create a new list
+            List<string> skillGrades = new List<string>();
+            List<string> skillLabels = new List<string>();
+            List<string> contents = new List<string>();
+            //take header skills only
+            foreach (string header in value.Take(1))
+            {
+                // splits all taken value except the personInfo and grades
+                string[] splitLabels = header.Split(',');
+                // adds a comma
+                string addSeperator = string.Join(",", splitLabels.Skip(3));
+                // add the string to list<string>
+                skillLabels.Add(addSeperator);
+                //MessageBox.Show(string.Concat(1));
+            }
+
+            // skip header label
+            foreach (string grades in value.Skip(1))
+            {
+                // splits all taken value except header
+                string[] splitGrades = grades.Split(',').Skip(3).ToArray();
+                // adds a comma
+                string addSeperator = string.Join(",", splitGrades);
+                // add the string to list<string>
+                skillGrades.Add(addSeperator);
+                //MessageBox.Show(string.Concat(2));
+            }
+
+            foreach (string personInfo in value.Take(1))
+            {
+                string[] splitPersonHeader = personInfo.Split(',');
+                ExportEmployeeMoreThan5Skills output = new ExportEmployeeMoreThan5Skills(splitPersonHeader[0], splitPersonHeader[1], splitPersonHeader[2], skillLabels, skillGrades);
+                contents.Add(output.ToString());
+                //MessageBox.Show(string.Concat(3));
+            }
+            //MessageBox.Show(string.Concat(personName));
+            // return the list content array
+            return value;
+        }
+        */
         public string skillsGrade(List<string> employeeContent)
         {
             string gradeContents = "";
@@ -170,19 +250,19 @@ namespace employee_evaluation
 
         public List<string> headerSkillLabel(List<string> headerContent)
         {
-            MessageBox.Show(string.Concat(headerContent.Take(1)));
+            //MessageBox.Show(string.Concat(headerContent.Take(1)));
             return headerContent.Take(1).ToList();
         }
         public List<string> autoHeaderSkillLabel(List<string> headerContent)
         {
-            List<string> getHeaderLabel = new List<string>();
+            List<string> getHeaderSkillLabel = new List<string>();
             foreach (string item in headerContent.Take(1).ToList())
             {
-                string[] splitHeaders = item.Split(',').Skip(2).ToArray();
+                string[] splitHeaders = item.Split(',').Skip(3).ToArray();
                 string putComma = string.Join(",", splitHeaders);
-                getHeaderLabel.Add(putComma);                
+                getHeaderSkillLabel.Add(putComma);                
             }            
-            return getHeaderLabel;
+            return getHeaderSkillLabel;
         }
 
         public int countSkillLabel(List<string> headerContent)
@@ -200,15 +280,14 @@ namespace employee_evaluation
 
         public string autoGetSkillGrade(List<string> employeeContent, int itemIndex)
         {
-            string skillsGrades = "";
+            string skillsGrades = "";           
             foreach (string skillsContent in employeeContent.Skip(1))
             {
-                // skips the 0-2 index of array
-                string[] seperateSkillContent = skillsContent.Split(',').Skip(2).ToArray();
+                // skips the 1-3 index of array
+                string[] seperateSkillContent = skillsContent.Split(',').Skip(3).ToArray();                
                 string[] getSkillsGrades = { seperateSkillContent[itemIndex] };
                 skillsGrades += string.Join(",",getSkillsGrades) + ",";
-            }
-            //MessageBox.Show(skillsGrades);
+            }            
             return skillsGrades;
         }
 
@@ -221,9 +300,9 @@ namespace employee_evaluation
         public void readMe5Instucrtion(string Path)
         {
             StreamWriter create5SkillText = new StreamWriter(Path+"\\5Skills.txt");
-            create5SkillText.Write("First Name, Middle Name, Last Name, SkillOne, SkillTwo, SkillThree, SkillFour, SkillFive");
-            create5SkillText.Write("\n" + "sample,sample,sample,5,5,5,5,5");
-            create5SkillText.Write("\n" + "follow,this,exact sample,1,1,1,1,1");
+            create5SkillText.Write("First Name, Middle Name, Last Name, SkillOne, SkillTwo, SkillThree, SkillFour, SkillFive, Over-all");
+            create5SkillText.Write("\n" + "sample,sample,sample,5,5,5,5,5,0");
+            create5SkillText.Write("\n" + "follow,this,exact sample,1,1,1,1,1,0");
             create5SkillText.Close();
         }
 
@@ -243,6 +322,15 @@ namespace employee_evaluation
                 "Viber / Telegram : +639668829302" +
                 "\n Skype : calsena.skype@gmail.com");
             create5SkillText.Close();
+        }
+
+        public static void staticMethod()
+        {
+            MessageBox.Show("static");
+        }
+        public void nonStaticMethod()
+        {
+            MessageBox.Show("non-static");
         }
     }
 }

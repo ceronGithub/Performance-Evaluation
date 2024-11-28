@@ -3,39 +3,70 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace employee_evaluation
 {
     internal class Employee
     {
-        public Employee(string firstName, string middleName, string lastName, string skillOne, string skillTwo, string skillThree, string skillFour, string skillFive, string over_All_Skill)
+        List<string> headerContent = new List<string>();
+        List<string> personContent = new List<string>();
+        List<string> gradingContent = new List<string>();
+
+        public Employee(List<string> headerLabel, List<string> personLabel, List<string> gradingscontent)
         {
-            FirstName = firstName;
-            MiddleName = middleName;
-            LastName = lastName;
-            this.skillOne = skillOne;
-            this.skillTwo = skillTwo;
-            this.skillThree = skillThree;
-            this.skillFour = skillFour;
-            this.skillFive = skillFive;
-            Over_All_Skill = over_All_Skill;
+            headerContent = headerLabel.ToList();
+            personContent = personLabel.ToList();
+            gradingContent = gradingscontent.ToList();            
         }
+
 
         // automatic property
         // similar to private string Firstname;
-        public string FirstName { get; set; }
-        public string MiddleName { get; set; }
-        public string LastName { get; set; }
-        public string skillOne { get; set; }
-        public string skillTwo { get; set; }
-        public string skillThree { get; set; }
-        public string skillFour { get; set; }
-        public string skillFive { get; set; }
-        public string Over_All_Skill { get; set; }
+        public List<string> headerLabel { get; set; }
+        public List<string> personLabel { get; set; }
+        public List<string> gradingscontent { get; set; }
 
         public override string ToString()
         {
-            return "First Name: " + FirstName + ", " + "Middle Name: " + MiddleName + ", " + "Last Name: " + LastName + ", " + "C# skill: " + skillOne + ", " + "Javascript skill: " + skillTwo + ", " + "CSS skill: " + skillThree + ", " + "HTML skill: " + skillFour + ", " + "Laravel: " + skillFive + ", " + "Over all performance: " + Over_All_Skill;
-        }
+            string header = "", personInfo = "", gradingInfo = "";
+            string output = "";
+            int lengthOfItem = 0 ;            
+            foreach(string HEADER in headerContent)
+            {
+                string[] HEADERITEM = HEADER.Split(',');
+                lengthOfItem = HEADERITEM.Length;
+                for (int i = 0; i < lengthOfItem; i++)
+                {
+                    header += HEADERITEM[i] + ",\t";
+                }
+            }
+
+            foreach (string PERSONNAME in personContent)
+            {
+                MessageBox.Show(string.Concat(personContent));
+                string[] PERSONITEM = PERSONNAME.Split(',');
+                lengthOfItem = PERSONITEM.Length;
+                for (int i = 0; i < lengthOfItem; i++)
+                {                    
+                    // every count of 3 index, personInfo string adds newLine
+                    if(i % 4 == 0)
+                    {
+                        personInfo += "\n";
+                    }
+                    else
+                    {
+                        personInfo += PERSONITEM[i] + ",\t";
+                    }
+                }
+            }
+            foreach (string GRADING in gradingContent)
+            {
+                string[] GRADINGITEM = GRADING.Split(',');
+
+            }            
+            output = header + personInfo + gradingInfo;
+            return output;
+        }        
     }
 }

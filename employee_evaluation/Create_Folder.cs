@@ -28,11 +28,35 @@ namespace employee_evaluation
         }
 
         public void createSubFolder()
-        {
-            string subFolder = folderPath.SubFolderPath();
+        {            
             if (!Directory.Exists(folderPath.SubFolderPath()))
             {
                 Directory.CreateDirectory(folderPath.SubFolderPath());               
+            }
+            else
+            {
+                // MessageBox.Show("Folder is existing!");
+            }
+            //return subFolder;
+        }
+
+        public void createSub5SkillsFolder()
+        {
+            if (!Directory.Exists(folderPath.SubFolderBelow5SkillLabelsPath()))
+            {
+                Directory.CreateDirectory(folderPath.SubFolderBelow5SkillLabelsPath());
+            }
+            else
+            {
+                // MessageBox.Show("Folder is existing!");
+            }
+            //return subFolder;
+        }
+        public void createSubMoreThan5SkillsFolder()
+        {
+            if (!Directory.Exists(folderPath.SubFolderMoreThan5SkillLabelsPath()))
+            {
+                Directory.CreateDirectory(folderPath.SubFolderMoreThan5SkillLabelsPath());
             }
             else
             {
