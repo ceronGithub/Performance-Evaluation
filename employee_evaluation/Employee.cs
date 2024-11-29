@@ -13,59 +13,64 @@ namespace employee_evaluation
         List<string> personContent = new List<string>();
         List<string> gradingContent = new List<string>();
 
-        public Employee(List<string> headerLabel, List<string> personLabel, List<string> gradingscontent)
+        public Employee(List<string> headerLabel, List<string> personLabel)
         {
             headerContent = headerLabel.ToList();
-            personContent = personLabel.ToList();
-            gradingContent = gradingscontent.ToList();            
+            personContent = personLabel.ToList();                       
         }
 
 
         // automatic property
         // similar to private string Firstname;
         public List<string> headerLabel { get; set; }
-        public List<string> personLabel { get; set; }
-        public List<string> gradingscontent { get; set; }
+        public List<string> personLabel { get; set; }        
 
         public override string ToString()
         {
             string header = "", personInfo = "", gradingInfo = "";
             string output = "";
-            int lengthOfItem = 0 ;            
-            foreach(string HEADER in headerContent)
+            int lengthOfItem = 0;            
+            int lengthOfSkillsHeader = 0;
+            
+            foreach (string HEADER in headerContent)
             {
-                string[] HEADERITEM = HEADER.Split(',');
+                string[] HEADERITEM = HEADER.Split(',');                                               
                 lengthOfItem = HEADERITEM.Length;
+                lengthOfSkillsHeader = HEADERITEM.Length;                
                 for (int i = 0; i < lengthOfItem; i++)
                 {
-                    header += HEADERITEM[i] + ",\t";
-                }
-            }
-
-            foreach (string PERSONNAME in personContent)
-            {
-                MessageBox.Show(string.Concat(personContent));
-                string[] PERSONITEM = PERSONNAME.Split(',');
-                lengthOfItem = PERSONITEM.Length;
-                for (int i = 0; i < lengthOfItem; i++)
-                {                    
-                    // every count of 3 index, personInfo string adds newLine
-                    if(i % 4 == 0)
+                    // adds \t tabspace to names label
+                    if(i <= 2)
                     {
-                        personInfo += "\n";
+                        header += HEADERITEM[i] + ",\t";
                     }
                     else
                     {
-                        personInfo += PERSONITEM[i] + ",\t";
+                        header += HEADERITEM[i] + ",\t";
+                    }                        
+                }
+                lengthOfItem = 0;
+            }
+
+            foreach (string PERSONNAME in personContent)
+            {                
+                string[] PERSONITEM = PERSONNAME.Split(',');               
+                lengthOfItem = PERSONITEM.Length;             
+                for (int i = 0; i < lengthOfItem; i++)
+                {
+                    //personInfo += "\n" + PERSONITEM[i] + ",\t\t\t\t";                                       
+                    if(i % lengthOfSkillsHeader == 0)
+                    {
+                        personInfo += "\n" + PERSONITEM[i] + ",\t";
+                    }
+                    else
+                    {
+                        personInfo += "\t" + PERSONITEM[i] + ",\t";
                     }
                 }
-            }
-            foreach (string GRADING in gradingContent)
-            {
-                string[] GRADINGITEM = GRADING.Split(',');
-
+                lengthOfItem = 0;
             }            
-            output = header + personInfo + gradingInfo;
+            output = header + personInfo;
             return output;
         }        
     }

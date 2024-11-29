@@ -59,7 +59,7 @@ namespace employee_evaluation
                 string[] items = Info.Split(',');
 
                 // adds a comma in between header
-                string addSeperator = string.Join(",", items.Take(3));
+                string addSeperator = string.Join(",", items);                
 
                 // convert string into a list
                 personContent.Add(addSeperator);                
@@ -78,7 +78,7 @@ namespace employee_evaluation
             }            
 
             // employee is a constructor
-            Employee personInfo = new Employee(headerContent, personContent, gradingContent);
+            Employee personInfo = new Employee(headerContent, personContent);
             
             // addes the persons into a new list
             contents.Add(personInfo.ToString());
