@@ -124,7 +124,8 @@ namespace employee_evaluation
         //gathered data from textfile will be plot into the charts
         //it has a auto generated charts
         private void button3_Click(object sender, EventArgs e)  
-        {            
+        {
+            folderCreation.createSubChartPictureFolder();
             // checks if gradings has value
             if (gradingH != "0" && gradingL != "0")
             {
@@ -135,6 +136,7 @@ namespace employee_evaluation
                     int countSkillLabel = classesMethods.countSkillLabel(File.ReadAllLines(filePath).ToList());
                     if (countSkillLabel <= 5)
                     {
+                        folderCreation.createSubChartPictureFolder5Skills();                        
                         // store strings from other class                
                         string skillGradeOne = (classesMethods.getSkillOne(File.ReadAllLines(filePath).ToList()));
                         string skillGradeTwo = (classesMethods.getSkillTwo(File.ReadAllLines(filePath).ToList()));
@@ -170,9 +172,9 @@ namespace employee_evaluation
                         button4.Enabled = false;
                         this.WindowState = FormWindowState.Maximized;
                         this.MaximizeBox = false;
-                    }
 
-                    createChartPicture(countSkillLabel);                   
+                        createChartPicture(countSkillLabel, countSkillLabel);
+                    }                                     
                 }
                 else
                 {
@@ -188,6 +190,7 @@ namespace employee_evaluation
 
         private void button4_Click(object sender, EventArgs e)
         {
+            folderCreation.createSubChartPictureFolder();
             // checks if gradings has value
             if (gradingH != "0" && gradingL != "0")
             {
@@ -204,6 +207,8 @@ namespace employee_evaluation
                     List<string> headerSkillLabel = classesMethods.autoHeaderSkillLabel(File.ReadAllLines(filePath).ToList());
                     if (countSkillLabel > 7)
                     {
+                        folderCreation.createSubChartPictureFolderMoreThan5Skills();
+                        
                         for (int i = 0; i < countSkillLabel; i++)
                         {
                             // every loop the skillGrade from text is stored into the skillArray variable as an array
@@ -231,15 +236,13 @@ namespace employee_evaluation
                             }
                         }
                         button2.Enabled = true;
+                        // unclickable button 3,4
+                        button3.Enabled = false;
+                        button4.Enabled = false;
+                        this.WindowState = FormWindowState.Maximized;
+                        this.MaximizeBox = false;
+                        createChartPicture(countSkillLabel, countSkillLabel);
                     }
-                    
-                    createChartPicture(countSkillLabel);
-
-                    // unclickable button 3,4
-                    button3.Enabled = false;
-                    button4.Enabled = false;
-                    this.WindowState = FormWindowState.Maximized;
-                    this.MaximizeBox = false;
                 }
                 else
                 {
@@ -447,14 +450,22 @@ namespace employee_evaluation
             return locationCoordinates;
         }
 
-        public void createChartPicture(int count)
+        public void createChartPicture(int count, int _countSkills)
         {
             foreach (Control _controls in this.Controls)
             {
                 for (int i = 0; i < count; i++)
                 {
-                    Chart _saveChart = (Chart)this.Controls.Find(i.ToString(), true)[i];
-                    _saveChart.SaveImage(folderPath.chartPicturePath() + "\\Skill" + i + ".png", ChartImageFormat.Png);
+                    if(_countSkills <= 5)
+                    {
+                        Chart _saveChart = (Chart)this.Controls.Find(i.ToString(), true)[i];
+                        _saveChart.SaveImage(folderPath.chartPicture5SkillsPath() + "\\Skill" + i + ".png", ChartImageFormat.Png);
+                    }
+                    else if(_countSkills > 6)
+                    {
+                        Chart _saveChart = (Chart)this.Controls.Find(i.ToString(), true)[i];
+                        _saveChart.SaveImage(folderPath.chartPicture5SkillsUpPath() + "\\Skill" + i + ".png", ChartImageFormat.Png);
+                    }
                 }
             }
         }

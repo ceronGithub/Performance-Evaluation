@@ -66,21 +66,43 @@ namespace employee_evaluation
         }
 
         public void createSubChartPictureFolder()
-        {
+        {                                 
             if (!Directory.Exists(folderPath.chartPicturePath()))
-            {
+            {                
                 Directory.CreateDirectory(folderPath.chartPicturePath());
             }
             else
             {
-                // MessageBox.Show("Folder is existing!");
+                // existing
+            }                        
+        }
+
+        public void createSubChartPictureFolder5Skills()
+        {
+            if (!Directory.Exists(folderPath.chartPicture5SkillsPath()))
+            {
+                Directory.CreateDirectory(folderPath.chartPicture5SkillsPath());
             }
-            //return subFolder;
+            else
+            {
+                // existing
+            }
+        }
+
+        public void createSubChartPictureFolderMoreThan5Skills()
+        {
+            if (!Directory.Exists(folderPath.chartPicture5SkillsUpPath()))
+            {
+                Directory.CreateDirectory(folderPath.chartPicture5SkillsUpPath());
+            }
+            else
+            {
+                // existing
+            }
         }
 
         public void ReadMe()
-        {
-            string readMeFolder = folderPath.ReadMeFolderPath();
+        {            
             if (!Directory.Exists(folderPath.ReadMeFolderPath()))
             {
                 Directory.CreateDirectory(folderPath.ReadMeFolderPath());

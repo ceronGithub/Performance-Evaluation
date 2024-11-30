@@ -12,7 +12,7 @@ namespace employee_evaluation
         string mainFolderPath = @""+ Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + "\\Desktop\\Report";
 
         //string subFolderPath = @"C:\Desktop\Reports\"+ DateTime.Now.ToString("MM-dd-yyyy")+"\\Evaluation";
-        string subFolderPath, readMeFolderPath, subFolderBelow5SkillsPath, subFolderMoreThan5SkillsPath, subPicChartPath;
+        string subFolderPath, readMeFolderPath, subFolderBelow5SkillsPath, subFolderMoreThan5SkillsPath, subPicChartPath, subPicChart5Path, subPicChart5UpPath;
 
         public string MainFolderPath ()
         {
@@ -37,6 +37,16 @@ namespace employee_evaluation
         public string chartPicturePath()
         {
             return subPicChartPath = SubFolderPath() + "\\Chart-Picture";
+        }
+
+        public string chartPicture5SkillsPath()
+        {
+            return subPicChart5Path = chartPicturePath() + "\\5-skills";
+        }
+
+        public string chartPicture5SkillsUpPath()
+        {
+            return subPicChart5UpPath = chartPicturePath() + "\\MoreThan-5-skills";
         }
 
         public string ReadMeFolderPath()
