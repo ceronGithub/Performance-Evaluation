@@ -307,7 +307,6 @@ namespace employee_evaluation
             return outputReturn;
         }
 
-
         public static void staticMethod()
         {
             MessageBox.Show("static");

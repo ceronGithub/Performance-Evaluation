@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 using System.Windows.Forms.DataVisualization.Charting;
+using System.Xml;
 
 namespace employee_evaluation
 {
@@ -17,7 +18,7 @@ namespace employee_evaluation
         string filePath;
         string gradingH = "0", gradingL = "0";
 
-        List<Chart> chartContent = new List<Chart>();                     
+        Random randomClr = new Random();        
 
         // Classes
         Create_Folder folderCreation = new Create_Folder();
@@ -158,11 +159,11 @@ namespace employee_evaluation
                         {
                             string[] splitHeaderIntoLabel = Labels.Split(',');
                             // auto generates charts
-                            int locCord0 = flatPointsCharts(personNames, skillOneArray, "-" + splitHeaderIntoLabel[3], 0, countSkillLabel);
-                            int locCord1 = flatPointsCharts(personNames, skillTwoArray, "-" + splitHeaderIntoLabel[4], locCord0, countSkillLabel);
-                            int locCord2 = flatPointsCharts(personNames, skillThreeArray, "-" + splitHeaderIntoLabel[5], locCord1, countSkillLabel);
-                            int locCord3 = flatPointsCharts(personNames, skillFourArray, "-" + splitHeaderIntoLabel[6], locCord2, countSkillLabel);
-                            int locCord4 = flatPointsCharts(personNames, skillFiveArray, "-" + splitHeaderIntoLabel[7], locCord3, countSkillLabel);
+                            int locCord0 = arrayChart(personNames, skillOneArray, "-" + splitHeaderIntoLabel[3], 0, countSkillLabel);                            
+                            int locCord1 = arrayChart(personNames, skillTwoArray, "-" + splitHeaderIntoLabel[4], locCord0, countSkillLabel);
+                            int locCord2 = arrayChart(personNames, skillThreeArray, "-" + splitHeaderIntoLabel[5], locCord1, countSkillLabel);
+                            int locCord3 = arrayChart(personNames, skillFourArray, "-" + splitHeaderIntoLabel[6], locCord2, countSkillLabel);
+                            int locCord4 = arrayChart(personNames, skillFiveArray, "-" + splitHeaderIntoLabel[7], locCord3, countSkillLabel);
                         }
                         button2.Enabled = true;
                         button3.Enabled = false;
@@ -170,10 +171,8 @@ namespace employee_evaluation
                         this.WindowState = FormWindowState.Maximized;
                         this.MaximizeBox = false;
                     }
-                    foreach (Chart chartElement in chartContent)
-                    {
-                        chartElement.SaveImage(folderPath.chartPicturePath() + "\\" + chartElement.Width + ".png", ChartImageFormat.Png);
-                    }
+
+                    createChartPicture(countSkillLabel);                   
                 }
                 else
                 {
@@ -217,22 +216,25 @@ namespace employee_evaluation
                                 if (LocCord == 0)
                                 {
                                     // locCord = 0;
-                                    LocCord = flatPointsCharts(personNames, new string[] { skillArray[i] }, "-" + splitHeaderIntoLabel[i], 0, countSkillLabel);
+                                    LocCord = arrayChart(personNames, new string[] { skillArray[i] }, "-" + splitHeaderIntoLabel[i], 0, countSkillLabel);
                                 }
                                 else if (LocCord == 76)
                                 {
                                     // locCord = 76
-                                    LocCord = flatPointsCharts(personNames, new string[] { skillArray[i] }, "-" + splitHeaderIntoLabel[i], 76, countSkillLabel);
+                                    LocCord = arrayChart(personNames, new string[] { skillArray[i] }, "-" + splitHeaderIntoLabel[i], 76, countSkillLabel);
                                 }
                                 else if (LocCord != 76)
                                 {
                                     //locCord = 306;                            
-                                    LocCord = flatPointsCharts(personNames, new string[] { skillArray[i] }, "-" + splitHeaderIntoLabel[i], LocCord, countSkillLabel);
+                                    LocCord = arrayChart(personNames, new string[] { skillArray[i] }, "-" + splitHeaderIntoLabel[i], LocCord, countSkillLabel);
                                 }
                             }
                         }
                         button2.Enabled = true;
                     }
+                    
+                    createChartPicture(countSkillLabel);
+
                     // unclickable button 3,4
                     button3.Enabled = false;
                     button4.Enabled = false;
@@ -285,7 +287,12 @@ namespace employee_evaluation
             int locationCoordinates = locationCord == 0 ? locationCord = 76
                 : locationCord == 76 ? locationCord += 306
                 : locationCord = locationCord + 306;
-            
+
+            //Chart[] newChart = new Chart[chartNumber];
+            Chart newChart = new Chart();
+            ChartArea chartArea = new ChartArea();
+            Random randomClr = new Random();            
+
             // run thru the persoContentArray collection
             foreach (string nameLabel in personContent)
             {
@@ -295,14 +302,13 @@ namespace employee_evaluation
                 foreach (string gradeValue in gradeContent)
                 {
                     //split each array into an objects
-                    string[] splitSkill = gradeValue.Split(',');                    
-
+                    string[] splitSkill = gradeValue.Split(',');
+                    int arrayLength = gradeValue.Split(',').Length;
                     // chart creation
-                    Random randomClr = new Random();
-                    //Chart[] chartArray = new Chart[chartNumber];
-                    //List<Chart> newChart = new List<Chart>();
-                    //Chart[] newChart = new Chart[u];
-                    Chart newChart = new Chart();
+                    for(int i = 0; i < arrayLength; i++)
+                    {
+                        newChart.Name = "Chart" + i;
+                    }
                     newChart.Height = 300;
                     newChart.Width = System.Windows.Forms.SystemInformation.PrimaryMonitorSize.Width;
                     newChart.Series.Clear();
@@ -316,12 +322,11 @@ namespace employee_evaluation
                     };
                     newChart.Series.Add(series1);
 
-                    for (int i = 0; i < splitSkill.Length; i++)
+                    for (int j = 0; j < splitSkill.Length; j++)
                     {
-                        series1.Points.AddXY(splitNameLabel[i], splitSkill[i]);
+                        series1.Points.AddXY(splitNameLabel[j], splitSkill[j]);
                     }
                     newChart.Invalidate();
-                    ChartArea chartArea = new ChartArea();
                     //chartArea.CursorX.IsUserEnabled = true;
                     //chartArea.CursorY.IsUserEnabled = true;
                     //chartArea.AxisX.ScaleView.Zoomable = true;
@@ -350,18 +355,25 @@ namespace employee_evaluation
                     legend1.Name = "Legend";
                     newChart.Legends.Add(legend1);
                     newChart.Location = new System.Drawing.Point(0, locationCoordinates);
-                    newChart.Name = "chart";                              
+
+                    //newChart[chartNumber].SaveImage(folderPath.chartPicturePath()+"\\"+newChart.Name+".png", ChartImageFormat.Png);
                     //newChart.Dock = System.Windows.Forms.DockStyle.Fill;                    
+                    
                     newChart.Visible = true;
-                    Controls.Add(newChart);
-                    chartContent.Add(newChart);                    
+                    Controls.Add(newChart);                    
                 }   
             }            
             return locationCoordinates;
         }
 
-        public void arrayChart(string[] personContent, string[] gradeContent, string seriesName, int locationCord, int chartNumber)
+        public int arrayChart(string[] personContent, string[] gradeContent, string seriesName, int locationCord, int chartNumber)
         {
+            // if-else statements
+            int locationCoordinates = locationCord == 0 ? locationCord = 76
+                : locationCord == 76 ? locationCord += 306
+                : locationCord = locationCord + 306;
+            
+            Chart[] newChart = new Chart[chartNumber];
             foreach (string nameLabel in personContent)
             {
                 //split each array into an objects
@@ -371,63 +383,78 @@ namespace employee_evaluation
                 {
                     //split each array into an objects
                     string[] splitSkill = gradeValue.Split(',');
-                    // chart creation
-                    Random randomClr = new Random();
-                    //Chart[] chartArray = new Chart[chartNumber];
-                    //List<Chart> newChart = new List<Chart>();
-                    Chart newChart = new Chart();
-
-                    newChart.Height = 300;
-                    newChart.Width = System.Windows.Forms.SystemInformation.PrimaryMonitorSize.Width;
-                    newChart.Series.Clear();
-                    var series1 = new System.Windows.Forms.DataVisualization.Charting.Series
+                    for(int i = 0; i < chartNumber; i++)
                     {
-                        Name = seriesName,
-                        Color = Color.FromArgb(randomClr.Next(0, 255), randomClr.Next(0, 255), randomClr.Next(0, 255)),
-                        IsVisibleInLegend = true,
-                        IsXValueIndexed = true,
-                        ChartType = SeriesChartType.Column
-                    };
-                    newChart.Series.Add(series1);
+                        newChart[i] = new Chart();
+                        newChart[i].Name = i.ToString();
+                        newChart[i].Height = 300;
+                        newChart[i].Width = System.Windows.Forms.SystemInformation.PrimaryMonitorSize.Width;
+                        newChart[i].Series.Clear();
+                        var series1 = new System.Windows.Forms.DataVisualization.Charting.Series
+                        {
+                            Name = seriesName,
+                            Color = Color.FromArgb(randomClr.Next(0, 255), randomClr.Next(0, 255), randomClr.Next(0, 255)),
+                            IsVisibleInLegend = true,
+                            IsXValueIndexed = true,
+                            ChartType = SeriesChartType.Column
+                        };
+                        newChart[i].Series.Add(series1);
 
-                    for (int i = 0; i < splitSkill.Length; i++)
-                    {
-                        series1.Points.AddXY(splitNameLabel[i], splitSkill[i]);
+                        for (int j = 0; j < splitSkill.Length; j++)
+                        {
+                            series1.Points.AddXY(splitNameLabel[j], splitSkill[j]);
+                        }
+                        newChart[i].Invalidate();
+                        ChartArea chartArea = new ChartArea();
+                        //chartArea.CursorX.IsUserEnabled = true;
+                        //chartArea.CursorY.IsUserEnabled = true;
+                        //chartArea.AxisX.ScaleView.Zoomable = true;
+                        //chartArea.AxisY.ScaleView.Zoomable = true;
+                        //chartArea.CursorX.AutoScroll = true;
+                        //chartArea.CursorY.AutoScroll = true;
+                        chartArea.AxisX.ScaleView.Zoom(0, 8);
+                        chartArea.AxisX.ScaleView.MinSize = 0;
+                        chartArea.AxisX.ScrollBar.Enabled = true;
+                        chartArea.AxisX.ScrollBar.IsPositionedInside = true;
+                        chartArea.AxisX.ScrollBar.Size = 20;
+                        chartArea.AxisX.ScrollBar.ButtonColor = Color.Silver;
+                        chartArea.AxisX.ScrollBar.LineColor = Color.Black;
+                        //chartArea.AxisY.ScrollBar.Enabled = true;
+                        //chartArea.AxisX.IsLabelAutoFit = true;
+                        // add label on Y and X axis
+                        chartArea.AxisX.Title = "Employee/s";
+                        chartArea.AxisX.TitleAlignment = StringAlignment.Far;
+                        chartArea.AxisY.Title = "Grading";
+                        chartArea.AxisY.TitleAlignment = StringAlignment.Far;
+
+                        chartArea.Name = "ChartArea";
+                        newChart[i].ChartAreas.Add(chartArea);
+
+                        Legend legend1 = new Legend();
+                        legend1.Name = "Legend";
+                        newChart[i].Legends.Add(legend1);
+                        newChart[i].Location = new System.Drawing.Point(0, locationCoordinates);
+                        
+                        //newChart[i].SaveImage(folderPath.chartPicturePath() + "\\" + newChart[i].Name + ".png", ChartImageFormat.Png);
+                        //MessageBox.Show(string.Concat(newChart[i]));
+                        
+                        //newChart.Dock = System.Windows.Forms.DockStyle.Fill;                    
+                        newChart[i].Visible = true;
+                        Controls.Add(newChart[i]);
                     }
-                    newChart.Invalidate();
-                    ChartArea chartArea = new ChartArea();
-                    //chartArea.CursorX.IsUserEnabled = true;
-                    //chartArea.CursorY.IsUserEnabled = true;
-                    //chartArea.AxisX.ScaleView.Zoomable = true;
-                    //chartArea.AxisY.ScaleView.Zoomable = true;
-                    //chartArea.CursorX.AutoScroll = true;
-                    //chartArea.CursorY.AutoScroll = true;
-                    chartArea.AxisX.ScaleView.Zoom(0, 8);
-                    chartArea.AxisX.ScaleView.MinSize = 0;
-                    chartArea.AxisX.ScrollBar.Enabled = true;
-                    chartArea.AxisX.ScrollBar.IsPositionedInside = true;
-                    chartArea.AxisX.ScrollBar.Size = 20;
-                    chartArea.AxisX.ScrollBar.ButtonColor = Color.Silver;
-                    chartArea.AxisX.ScrollBar.LineColor = Color.Black;
-                    //chartArea.AxisY.ScrollBar.Enabled = true;
-                    //chartArea.AxisX.IsLabelAutoFit = true;
-                    // add label on Y and X axis
-                    chartArea.AxisX.Title = "Employee/s";
-                    chartArea.AxisX.TitleAlignment = StringAlignment.Far;
-                    chartArea.AxisY.Title = "Grading";
-                    chartArea.AxisY.TitleAlignment = StringAlignment.Far;
+                }
+            }
+            return locationCoordinates;
+        }
 
-                    chartArea.Name = "ChartArea";
-                    newChart.ChartAreas.Add(chartArea);
-
-                    Legend legend1 = new Legend();
-                    legend1.Name = "Legend";
-                    newChart.Legends.Add(legend1);
-                    newChart.Location = new System.Drawing.Point(0, 76);
-
-                    //newChart.Dock = System.Windows.Forms.DockStyle.Fill;                    
-                    newChart.Visible = true;
-                    Controls.Add(newChart);
+        public void createChartPicture(int count)
+        {
+            foreach (Control _controls in this.Controls)
+            {
+                for (int i = 0; i < count; i++)
+                {
+                    Chart _saveChart = (Chart)this.Controls.Find(i.ToString(), true)[i];
+                    _saveChart.SaveImage(folderPath.chartPicturePath() + "\\Skill" + i + ".png", ChartImageFormat.Png);
                 }
             }
         }
