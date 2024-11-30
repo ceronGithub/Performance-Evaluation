@@ -17,9 +17,7 @@ namespace employee_evaluation
         string filePath;
         string gradingH = "0", gradingL = "0";
 
-        List<string> lines = new List<string>();
-        // a list and calling the employee class
-        List<Employee> people = new List<Employee>();
+        List<Chart> chartContent = new List<Chart>();                     
 
         // Classes
         Create_Folder folderCreation = new Create_Folder();
@@ -76,7 +74,7 @@ namespace employee_evaluation
                     filePath = Path.GetFullPath(browseFile.FileName);
 
                     // change the button1 text to reset if textbox1 is not null
-                    button1.Text = "reset";
+                    button1.Text = "Reset";
                     button2.Enabled = false; button3.Enabled = true; button4.Enabled = true;
                 }
             }
@@ -96,6 +94,7 @@ namespace employee_evaluation
 
             // creates subfolder
             folderCreation.createSubFolder();
+            folderCreation.createSubChartPictureFolder();
 
             // MessageBox.Show(""+countSkillLabel);
 
@@ -103,7 +102,7 @@ namespace employee_evaluation
             // and stores its content to a list. a list is where you can store texts in an array form.
             List<string> personContent = classesMethods.exportToTextFile(File.ReadAllLines(filePath).ToList());
 
-            if (countSkillLabel <= 6)
+            if (countSkillLabel <= 5)
             {
                 // creates 5 skill folder                
                 folderCreation.createSub5SkillsFolder();
@@ -159,17 +158,21 @@ namespace employee_evaluation
                         {
                             string[] splitHeaderIntoLabel = Labels.Split(',');
                             // auto generates charts
-                            int locCord0 = flatPointsCharts(personNames, skillOneArray, "-" + splitHeaderIntoLabel[3], 0);
-                            int locCord1 = flatPointsCharts(personNames, skillTwoArray, "-" + splitHeaderIntoLabel[4], locCord0);
-                            int locCord2 = flatPointsCharts(personNames, skillThreeArray, "-" + splitHeaderIntoLabel[5], locCord1);
-                            int locCord3 = flatPointsCharts(personNames, skillFourArray, "-" + splitHeaderIntoLabel[6], locCord2);
-                            int locCord4 = flatPointsCharts(personNames, skillFiveArray, "-" + splitHeaderIntoLabel[7], locCord3);
+                            int locCord0 = flatPointsCharts(personNames, skillOneArray, "-" + splitHeaderIntoLabel[3], 0, countSkillLabel);
+                            int locCord1 = flatPointsCharts(personNames, skillTwoArray, "-" + splitHeaderIntoLabel[4], locCord0, countSkillLabel);
+                            int locCord2 = flatPointsCharts(personNames, skillThreeArray, "-" + splitHeaderIntoLabel[5], locCord1, countSkillLabel);
+                            int locCord3 = flatPointsCharts(personNames, skillFourArray, "-" + splitHeaderIntoLabel[6], locCord2, countSkillLabel);
+                            int locCord4 = flatPointsCharts(personNames, skillFiveArray, "-" + splitHeaderIntoLabel[7], locCord3, countSkillLabel);
                         }
                         button2.Enabled = true;
                         button3.Enabled = false;
                         button4.Enabled = false;
                         this.WindowState = FormWindowState.Maximized;
                         this.MaximizeBox = false;
+                    }
+                    foreach (Chart chartElement in chartContent)
+                    {
+                        chartElement.SaveImage(folderPath.chartPicturePath() + "\\" + chartElement.Width + ".png", ChartImageFormat.Png);
                     }
                 }
                 else
@@ -193,7 +196,7 @@ namespace employee_evaluation
                 if (checker == "Pass")
                 {
                     int countSkillLabel = classesMethods.countSkillLabel(File.ReadAllLines(filePath).ToList());
-                    string[] skillArray = new string[countSkillLabel];
+                    string[] skillArray = new string[countSkillLabel];                    
                     int LocCord = 0;
                     string[] headerLabels = new string[countSkillLabel];
                     string personName = (classesMethods.personInfo(File.ReadAllLines(filePath).ToList()));
@@ -214,24 +217,25 @@ namespace employee_evaluation
                                 if (LocCord == 0)
                                 {
                                     // locCord = 0;
-                                    LocCord = flatPointsCharts(personNames, new string[] { skillArray[i] }, "-" + splitHeaderIntoLabel[i], 0);
+                                    LocCord = flatPointsCharts(personNames, new string[] { skillArray[i] }, "-" + splitHeaderIntoLabel[i], 0, countSkillLabel);
                                 }
                                 else if (LocCord == 76)
                                 {
                                     // locCord = 76
-                                    LocCord = flatPointsCharts(personNames, new string[] { skillArray[i] }, "-" + splitHeaderIntoLabel[i], 76);
+                                    LocCord = flatPointsCharts(personNames, new string[] { skillArray[i] }, "-" + splitHeaderIntoLabel[i], 76, countSkillLabel);
                                 }
                                 else if (LocCord != 76)
                                 {
                                     //locCord = 306;                            
-                                    LocCord = flatPointsCharts(personNames, new string[] { skillArray[i] }, "-" + splitHeaderIntoLabel[i], LocCord);
+                                    LocCord = flatPointsCharts(personNames, new string[] { skillArray[i] }, "-" + splitHeaderIntoLabel[i], LocCord, countSkillLabel);
                                 }
                             }
                         }
                         button2.Enabled = true;
                     }
-                    // unclickable button 3
+                    // unclickable button 3,4
                     button3.Enabled = false;
+                    button4.Enabled = false;
                     this.WindowState = FormWindowState.Maximized;
                     this.MaximizeBox = false;
                 }
@@ -275,13 +279,13 @@ namespace employee_evaluation
             Application.Exit();
         }
 
-        public int flatPointsCharts(string[] personContent, string[] gradeContent, string seriesName, int locationCord)
+        public int flatPointsCharts(string[] personContent, string[] gradeContent, string seriesName, int locationCord, int chartNumber)
         {
             // if-else statements
             int locationCoordinates = locationCord == 0 ? locationCord = 76
                 : locationCord == 76 ? locationCord += 306
                 : locationCord = locationCord + 306;
-
+            
             // run thru the persoContentArray collection
             foreach (string nameLabel in personContent)
             {
@@ -291,12 +295,16 @@ namespace employee_evaluation
                 foreach (string gradeValue in gradeContent)
                 {
                     //split each array into an objects
-                    string[] splitSkill = gradeValue.Split(',');
+                    string[] splitSkill = gradeValue.Split(',');                    
+
                     // chart creation
                     Random randomClr = new Random();
+                    //Chart[] chartArray = new Chart[chartNumber];
+                    //List<Chart> newChart = new List<Chart>();
+                    //Chart[] newChart = new Chart[u];
                     Chart newChart = new Chart();
                     newChart.Height = 300;
-                    newChart.Width = 900;
+                    newChart.Width = System.Windows.Forms.SystemInformation.PrimaryMonitorSize.Width;
                     newChart.Series.Clear();
                     var series1 = new System.Windows.Forms.DataVisualization.Charting.Series
                     {
@@ -335,19 +343,93 @@ namespace employee_evaluation
                     chartArea.AxisY.Title = "Grading";
                     chartArea.AxisY.TitleAlignment = StringAlignment.Far;
 
-                    chartArea.Name = "ChartArea1";
+                    chartArea.Name = "ChartArea";
                     newChart.ChartAreas.Add(chartArea);
 
                     Legend legend1 = new Legend();
                     legend1.Name = "Legend";
                     newChart.Legends.Add(legend1);
                     newChart.Location = new System.Drawing.Point(0, locationCoordinates);
+                    newChart.Name = "chart";                              
+                    //newChart.Dock = System.Windows.Forms.DockStyle.Fill;                    
+                    newChart.Visible = true;
+                    Controls.Add(newChart);
+                    chartContent.Add(newChart);                    
+                }   
+            }            
+            return locationCoordinates;
+        }
+
+        public void arrayChart(string[] personContent, string[] gradeContent, string seriesName, int locationCord, int chartNumber)
+        {
+            foreach (string nameLabel in personContent)
+            {
+                //split each array into an objects
+                string[] splitNameLabel = nameLabel.Split(',');
+                // run thru the gradeContentArray collection
+                foreach (string gradeValue in gradeContent)
+                {
+                    //split each array into an objects
+                    string[] splitSkill = gradeValue.Split(',');
+                    // chart creation
+                    Random randomClr = new Random();
+                    //Chart[] chartArray = new Chart[chartNumber];
+                    //List<Chart> newChart = new List<Chart>();
+                    Chart newChart = new Chart();
+
+                    newChart.Height = 300;
+                    newChart.Width = System.Windows.Forms.SystemInformation.PrimaryMonitorSize.Width;
+                    newChart.Series.Clear();
+                    var series1 = new System.Windows.Forms.DataVisualization.Charting.Series
+                    {
+                        Name = seriesName,
+                        Color = Color.FromArgb(randomClr.Next(0, 255), randomClr.Next(0, 255), randomClr.Next(0, 255)),
+                        IsVisibleInLegend = true,
+                        IsXValueIndexed = true,
+                        ChartType = SeriesChartType.Column
+                    };
+                    newChart.Series.Add(series1);
+
+                    for (int i = 0; i < splitSkill.Length; i++)
+                    {
+                        series1.Points.AddXY(splitNameLabel[i], splitSkill[i]);
+                    }
+                    newChart.Invalidate();
+                    ChartArea chartArea = new ChartArea();
+                    //chartArea.CursorX.IsUserEnabled = true;
+                    //chartArea.CursorY.IsUserEnabled = true;
+                    //chartArea.AxisX.ScaleView.Zoomable = true;
+                    //chartArea.AxisY.ScaleView.Zoomable = true;
+                    //chartArea.CursorX.AutoScroll = true;
+                    //chartArea.CursorY.AutoScroll = true;
+                    chartArea.AxisX.ScaleView.Zoom(0, 8);
+                    chartArea.AxisX.ScaleView.MinSize = 0;
+                    chartArea.AxisX.ScrollBar.Enabled = true;
+                    chartArea.AxisX.ScrollBar.IsPositionedInside = true;
+                    chartArea.AxisX.ScrollBar.Size = 20;
+                    chartArea.AxisX.ScrollBar.ButtonColor = Color.Silver;
+                    chartArea.AxisX.ScrollBar.LineColor = Color.Black;
+                    //chartArea.AxisY.ScrollBar.Enabled = true;
+                    //chartArea.AxisX.IsLabelAutoFit = true;
+                    // add label on Y and X axis
+                    chartArea.AxisX.Title = "Employee/s";
+                    chartArea.AxisX.TitleAlignment = StringAlignment.Far;
+                    chartArea.AxisY.Title = "Grading";
+                    chartArea.AxisY.TitleAlignment = StringAlignment.Far;
+
+                    chartArea.Name = "ChartArea";
+                    newChart.ChartAreas.Add(chartArea);
+
+                    Legend legend1 = new Legend();
+                    legend1.Name = "Legend";
+                    newChart.Legends.Add(legend1);
+                    newChart.Location = new System.Drawing.Point(0, 76);
+
                     //newChart.Dock = System.Windows.Forms.DockStyle.Fill;                    
                     newChart.Visible = true;
                     Controls.Add(newChart);
                 }
             }
-            return locationCoordinates;
         }
     }
 }

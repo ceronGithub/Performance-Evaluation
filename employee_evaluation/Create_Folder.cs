@@ -65,6 +65,19 @@ namespace employee_evaluation
             //return subFolder;
         }
 
+        public void createSubChartPictureFolder()
+        {
+            if (!Directory.Exists(folderPath.chartPicturePath()))
+            {
+                Directory.CreateDirectory(folderPath.chartPicturePath());
+            }
+            else
+            {
+                // MessageBox.Show("Folder is existing!");
+            }
+            //return subFolder;
+        }
+
         public void ReadMe()
         {
             string readMeFolder = folderPath.ReadMeFolderPath();

@@ -257,8 +257,8 @@ namespace employee_evaluation
         {
             StreamWriter create5SkillText = new StreamWriter(Path+"\\5Skills.txt");
             create5SkillText.Write("First Name, Middle Name, Last Name, SkillOne, SkillTwo, SkillThree, SkillFour, SkillFive");
-            create5SkillText.Write("\n" + "sample,sample,sample,5,5,5,5,5");
-            create5SkillText.Write("\n" + "follow,this,exact sample,1,1,1,1,1");
+            create5SkillText.Write("\n" + "sample,sample,sample,1,2,3,4,5");
+            create5SkillText.Write("\n" + "follow,this,exact sample,1,2,3,4,5");
             create5SkillText.Close();
         }
 
