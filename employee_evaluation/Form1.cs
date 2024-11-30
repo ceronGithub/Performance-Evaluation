@@ -35,20 +35,28 @@ namespace employee_evaluation
             folderCreation.ReadMe();
             //creates a file in the subfolder readme
             classesMethods.readMe5Instucrtion(folderPath.ReadMeFolderPath());
-            classesMethods.readMeMoreThan5Instucrtion(folderPath.ReadMeFolderPath());
+            classesMethods.readMeMosreThan5Instucrtion(folderPath.ReadMeFolderPath());
             classesMethods.readMeMoreInformation(folderPath.ReadMeFolderPath());
 
         }
 
         private void Form1_Load(object sender, EventArgs e)
         {
+            if(Int32.Parse(gradingH) == 0 && Int32.Parse(gradingL) == 0)
+            {
+                MessageBox.Show("Please set grading for high, and low. to be able to evaluate all employee/s", "NOTE!", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            else
+            {
+                MessageBox.Show("A grading system has been set. \nfor Highest grade :" + gradingH + "\nfor Lowest grade :" + gradingL, "NOTE!", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
         }
 
         // this function enables the form1 to recieve data from other form/s
         public string Reciever(string Fvalue, string Lvalue)
         {
-            gradingH = "" + Fvalue;
-            gradingL = "" + Lvalue;
+            gradingH = Fvalue;
+            gradingL = Lvalue;
             return gradingH + gradingL;
         }
 
@@ -115,94 +123,128 @@ namespace employee_evaluation
         //this functions gets data from textfile
         //gathered data from textfile will be plot into the charts
         //it has a auto generated charts
-        private void button3_Click(object sender, EventArgs e)
-        {
-            //MessageBox.Show("this only accepts 5 skills", MessageBoxIcon.Warning + "Note!", MessageBoxButtons.OK);
-
-            // this counts how many skillLabel are registered
-            int countSkillLabel = classesMethods.countSkillLabel(File.ReadAllLines(filePath).ToList());
-            if (countSkillLabel <= 6)
+        private void button3_Click(object sender, EventArgs e)  
+        {            
+            // checks if gradings has value
+            if (gradingH != "0" && gradingL != "0")
             {
-                // store strings from other class                
-                string skillGradeOne = (classesMethods.getSkillOne(File.ReadAllLines(filePath).ToList()));
-                string skillGradeTwo = (classesMethods.getSkillTwo(File.ReadAllLines(filePath).ToList()));
-                string skillGradeThree = (classesMethods.getSkillThree(File.ReadAllLines(filePath).ToList()));
-                string skillGradeFour = (classesMethods.getSkillFour(File.ReadAllLines(filePath).ToList()));
-                string skillGradeFive = (classesMethods.getSkillFive(File.ReadAllLines(filePath).ToList()));
-
-                string personName = (classesMethods.personInfo(File.ReadAllLines(filePath).ToList()));
-
-                // convert string variable into an array string variable
-                string[] skillOneArray = { skillGradeOne };
-                string[] skillTwoArray = { skillGradeTwo };
-                string[] skillThreeArray = { skillGradeThree };
-                string[] skillFourArray = { skillGradeFour };
-                string[] skillFiveArray = { skillGradeFive };
-
-                string[] personNames = { personName };
-
-                List<string> headerSkillLabel = classesMethods.headerSkillLabel(File.ReadAllLines(filePath).ToList());
-
-                foreach (string Labels in headerSkillLabel)
+                string checker = classesMethods.textFileChecker(File.ReadAllLines(filePath).ToList());
+                if (checker == "Pass")
                 {
-                    string[] splitHeaderIntoLabel = Labels.Split(',');
-                    // auto generates charts
-                    int locCord0 = flatPointsCharts(personNames, skillOneArray, "-" + splitHeaderIntoLabel[3], 0);
-                    int locCord1 = flatPointsCharts(personNames, skillTwoArray, "-" + splitHeaderIntoLabel[4], locCord0);
-                    int locCord2 = flatPointsCharts(personNames, skillThreeArray, "-" + splitHeaderIntoLabel[5], locCord1);
-                    int locCord3 = flatPointsCharts(personNames, skillFourArray, "-" + splitHeaderIntoLabel[6], locCord2);
-                    int locCord4 = flatPointsCharts(personNames, skillFiveArray, "-" + splitHeaderIntoLabel[7], locCord3);
+                    // this counts how many skillLabel are registered
+                    int countSkillLabel = classesMethods.countSkillLabel(File.ReadAllLines(filePath).ToList());
+                    if (countSkillLabel <= 5)
+                    {
+                        // store strings from other class                
+                        string skillGradeOne = (classesMethods.getSkillOne(File.ReadAllLines(filePath).ToList()));
+                        string skillGradeTwo = (classesMethods.getSkillTwo(File.ReadAllLines(filePath).ToList()));
+                        string skillGradeThree = (classesMethods.getSkillThree(File.ReadAllLines(filePath).ToList()));
+                        string skillGradeFour = (classesMethods.getSkillFour(File.ReadAllLines(filePath).ToList()));
+                        string skillGradeFive = (classesMethods.getSkillFive(File.ReadAllLines(filePath).ToList()));
+
+                        string personName = (classesMethods.personInfo(File.ReadAllLines(filePath).ToList()));
+
+                        // convert string variable into an array string variable
+                        string[] skillOneArray = { skillGradeOne };
+                        string[] skillTwoArray = { skillGradeTwo };
+                        string[] skillThreeArray = { skillGradeThree };
+                        string[] skillFourArray = { skillGradeFour };
+                        string[] skillFiveArray = { skillGradeFive };
+
+                        string[] personNames = { personName };
+
+                        List<string> headerSkillLabel = classesMethods.headerSkillLabel(File.ReadAllLines(filePath).ToList());
+
+                        foreach (string Labels in headerSkillLabel)
+                        {
+                            string[] splitHeaderIntoLabel = Labels.Split(',');
+                            // auto generates charts
+                            int locCord0 = flatPointsCharts(personNames, skillOneArray, "-" + splitHeaderIntoLabel[3], 0);
+                            int locCord1 = flatPointsCharts(personNames, skillTwoArray, "-" + splitHeaderIntoLabel[4], locCord0);
+                            int locCord2 = flatPointsCharts(personNames, skillThreeArray, "-" + splitHeaderIntoLabel[5], locCord1);
+                            int locCord3 = flatPointsCharts(personNames, skillFourArray, "-" + splitHeaderIntoLabel[6], locCord2);
+                            int locCord4 = flatPointsCharts(personNames, skillFiveArray, "-" + splitHeaderIntoLabel[7], locCord3);
+                        }
+                        button2.Enabled = true;
+                        button3.Enabled = false;
+                        button4.Enabled = false;
+                        this.WindowState = FormWindowState.Maximized;
+                        this.MaximizeBox = false;
+                    }
                 }
-                button2.Enabled = true;
-                button3.Enabled = false;
-                button4.Enabled = false;
+                else
+                {
+                    // text, title, button, icon
+                    MessageBox.Show("Please double check the the textfile, check if there's any missing value and a row without value.", "ERROR!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+            else
+            {
+                MessageBox.Show("Please set a grading standard", "WARNING", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
         }
 
         private void button4_Click(object sender, EventArgs e)
         {
-            int countSkillLabel = classesMethods.countSkillLabel(File.ReadAllLines(filePath).ToList());
-            string[] skillArray = new string[countSkillLabel];
-            int LocCord = 0;
-            string[] headerLabels = new string[countSkillLabel];
-            string personName = (classesMethods.personInfo(File.ReadAllLines(filePath).ToList()));
-            string[] personNames = { personName };
-
-            List<string> headerSkillLabel = classesMethods.autoHeaderSkillLabel(File.ReadAllLines(filePath).ToList());
-            if (countSkillLabel > 7)
-            {                                
-                for (int i = 0; i < countSkillLabel; i++)
+            // checks if gradings has value
+            if (gradingH != "0" && gradingL != "0")
+            {
+                string checker = classesMethods.textFileChecker(File.ReadAllLines(filePath).ToList());
+                if (checker == "Pass")
                 {
-                    // every loop the skillGrade from text is stored into the skillArray variable as an array
-                    skillArray[i] = (classesMethods.autoGetSkillGrade(File.ReadAllLines(filePath).ToList(), i));                                        
+                    int countSkillLabel = classesMethods.countSkillLabel(File.ReadAllLines(filePath).ToList());
+                    string[] skillArray = new string[countSkillLabel];
+                    int LocCord = 0;
+                    string[] headerLabels = new string[countSkillLabel];
+                    string personName = (classesMethods.personInfo(File.ReadAllLines(filePath).ToList()));
+                    string[] personNames = { personName };
 
-                    foreach (string Labels in headerSkillLabel)
+                    List<string> headerSkillLabel = classesMethods.autoHeaderSkillLabel(File.ReadAllLines(filePath).ToList());
+                    if (countSkillLabel > 7)
                     {
-                        string[] splitHeaderIntoLabel = Labels.Split(',');
-                        // auto generates charts
-                        if (LocCord == 0)
+                        for (int i = 0; i < countSkillLabel; i++)
                         {
-                            // locCord = 0;
-                            LocCord = flatPointsCharts(personNames, new string[] { skillArray[i] }, "-" + splitHeaderIntoLabel[i], 0);
+                            // every loop the skillGrade from text is stored into the skillArray variable as an array
+                            skillArray[i] = (classesMethods.autoGetSkillGrade(File.ReadAllLines(filePath).ToList(), i));
+
+                            foreach (string Labels in headerSkillLabel)
+                            {
+                                string[] splitHeaderIntoLabel = Labels.Split(',');
+                                // auto generates charts
+                                if (LocCord == 0)
+                                {
+                                    // locCord = 0;
+                                    LocCord = flatPointsCharts(personNames, new string[] { skillArray[i] }, "-" + splitHeaderIntoLabel[i], 0);
+                                }
+                                else if (LocCord == 76)
+                                {
+                                    // locCord = 76
+                                    LocCord = flatPointsCharts(personNames, new string[] { skillArray[i] }, "-" + splitHeaderIntoLabel[i], 76);
+                                }
+                                else if (LocCord != 76)
+                                {
+                                    //locCord = 306;                            
+                                    LocCord = flatPointsCharts(personNames, new string[] { skillArray[i] }, "-" + splitHeaderIntoLabel[i], LocCord);
+                                }
+                            }
                         }
-                        else if (LocCord == 76)
-                        {
-                            // locCord = 76
-                            LocCord = flatPointsCharts(personNames, new string[] { skillArray[i] }, "-" + splitHeaderIntoLabel[i], 76);
-                        }
-                        else if (LocCord != 76)
-                        {
-                            //locCord = 306;                            
-                            LocCord = flatPointsCharts(personNames, new string[] { skillArray[i] }, "-" + splitHeaderIntoLabel[i], LocCord);
-                        }
+                        button2.Enabled = true;
                     }
+                    // unclickable button 3
+                    button3.Enabled = false;
+                    this.WindowState = FormWindowState.Maximized;
+                    this.MaximizeBox = false;
                 }
-                button2.Enabled = true;
+                else
+                {
+                    // text, title, button, icon
+                    MessageBox.Show("Please double check the the textfile, check if there's any missing value and a row without value.", "ERROR!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
             }
-            // unclickable button 3
-            button3.Enabled = false;
-            this.WindowState = FormWindowState.Maximized;
-            this.MaximizeBox = false;
+            else
+            {
+                MessageBox.Show("Please set a grading standard", "WARNING", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
         }
 
         private void mainDirectoryToolStripMenuItem_Click(object sender, EventArgs e)
@@ -225,6 +267,12 @@ namespace employee_evaluation
             Grading_System f2 = new Grading_System();
             f2.Show();
             this.Hide();
+        }
+
+        private void Form1_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            // exit the application completely
+            Application.Exit();
         }
 
         public int flatPointsCharts(string[] personContent, string[] gradeContent, string seriesName, int locationCord)
@@ -281,6 +329,12 @@ namespace employee_evaluation
                     chartArea.AxisX.ScrollBar.LineColor = Color.Black;
                     //chartArea.AxisY.ScrollBar.Enabled = true;
                     //chartArea.AxisX.IsLabelAutoFit = true;
+                    // add label on Y and X axis
+                    chartArea.AxisX.Title = "Employee/s";
+                    chartArea.AxisX.TitleAlignment = StringAlignment.Far;
+                    chartArea.AxisY.Title = "Grading";
+                    chartArea.AxisY.TitleAlignment = StringAlignment.Far;
+
                     chartArea.Name = "ChartArea1";
                     newChart.ChartAreas.Add(chartArea);
 

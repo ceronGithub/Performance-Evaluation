@@ -85,50 +85,7 @@ namespace employee_evaluation
             // return the list content array
 
             return contents;
-        }
-        /*
-        public List<string> makeEmployeeAsObjectMoreThan5Skills(List<string> value)
-        {           
-            // create a new list
-            List<string> skillGrades = new List<string>();
-            List<string> skillLabels = new List<string>();
-            List<string> contents = new List<string>();
-            //take header skills only
-            foreach (string header in value.Take(1))
-            {
-                // splits all taken value except the personInfo and grades
-                string[] splitLabels = header.Split(',');
-                // adds a comma
-                string addSeperator = string.Join(",", splitLabels.Skip(3));
-                // add the string to list<string>
-                skillLabels.Add(addSeperator);
-                //MessageBox.Show(string.Concat(1));
-            }
-
-            // skip header label
-            foreach (string grades in value.Skip(1))
-            {
-                // splits all taken value except header
-                string[] splitGrades = grades.Split(',').Skip(3).ToArray();
-                // adds a comma
-                string addSeperator = string.Join(",", splitGrades);
-                // add the string to list<string>
-                skillGrades.Add(addSeperator);
-                //MessageBox.Show(string.Concat(2));
-            }
-
-            foreach (string personInfo in value.Take(1))
-            {
-                string[] splitPersonHeader = personInfo.Split(',');
-                ExportEmployeeMoreThan5Skills output = new ExportEmployeeMoreThan5Skills(splitPersonHeader[0], splitPersonHeader[1], splitPersonHeader[2], skillLabels, skillGrades);
-                contents.Add(output.ToString());
-                //MessageBox.Show(string.Concat(3));
-            }
-            //MessageBox.Show(string.Concat(personName));
-            // return the list content array
-            return value;
-        }
-        */
+        }        
         public string skillsGrade(List<string> employeeContent)
         {
             string gradeContents = "";
@@ -168,14 +125,13 @@ namespace employee_evaluation
             string personInfo = "";         
             foreach(string employeeName in employeeContent.Skip(1))
             {
-                string[] seperateName = employeeName.Split(',');
+                string[] seperateName = employeeName.Split(',');                
                 string[] getName = { string.Concat(seperateName[0], seperateName[2]) + "," };
                 personInfo += string.Concat(getName);
                 //MessageBox.Show(string.Join(",", personInfo));
             }            
             return personInfo;
-        }
-       
+        }       
         public string getSkillOne(List<string> employeeContent)
         {
             string skillOne = "";            
@@ -300,13 +256,13 @@ namespace employee_evaluation
         public void readMe5Instucrtion(string Path)
         {
             StreamWriter create5SkillText = new StreamWriter(Path+"\\5Skills.txt");
-            create5SkillText.Write("First Name, Middle Name, Last Name, SkillOne, SkillTwo, SkillThree, SkillFour, SkillFive, Over-all");
-            create5SkillText.Write("\n" + "sample,sample,sample,5,5,5,5,5,0");
-            create5SkillText.Write("\n" + "follow,this,exact sample,1,1,1,1,1,0");
+            create5SkillText.Write("First Name, Middle Name, Last Name, SkillOne, SkillTwo, SkillThree, SkillFour, SkillFive");
+            create5SkillText.Write("\n" + "sample,sample,sample,5,5,5,5,5");
+            create5SkillText.Write("\n" + "follow,this,exact sample,1,1,1,1,1");
             create5SkillText.Close();
         }
 
-        public void readMeMoreThan5Instucrtion(string Path)
+        public void readMeMosreThan5Instucrtion(string Path)
         {
             StreamWriter create5SkillText = new StreamWriter(Path + "\\MoreThan5Skills.txt");
             create5SkillText.Write("First Name, Middle Name, Last Name, SkillOne, SkillTwo, SkillThree, SkillFour, SkillFive, SkillSix, SkillSeven, SkillEight, SkillNine, SkillTen");
@@ -323,6 +279,34 @@ namespace employee_evaluation
                 "\n Skype : calsena.skype@gmail.com");
             create5SkillText.Close();
         }
+
+        public string textFileChecker(List<string> contents)
+        {
+            int countHeader = 0;
+            string outputReturn = "";
+            // checks the header first
+            foreach(string header in contents.Take(1))
+            {
+                countHeader = header.Split(',').Count();
+            }            
+            // checks if all value is equal to header
+            foreach(string checkValues in contents.Skip(1))
+            {
+                // checks value per-row
+                int INDEX = checkValues.Split(',').Length;
+                if(INDEX == countHeader)
+                {
+                    outputReturn = "Pass";
+                }
+                else
+                {
+                    outputReturn = "Fail";
+                }                
+            }
+            // returns value
+            return outputReturn;
+        }
+
 
         public static void staticMethod()
         {
