@@ -41,6 +41,7 @@
             this.button2 = new System.Windows.Forms.Button();
             this.button3 = new System.Windows.Forms.Button();
             this.button4 = new System.Windows.Forms.Button();
+            this.testingToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -76,7 +77,8 @@
             // 
             this.settingsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.mainDirectoryToolStripMenuItem,
-            this.gradeToolStripMenuItem});
+            this.gradeToolStripMenuItem,
+            this.testingToolStripMenuItem});
             this.settingsToolStripMenuItem.Name = "settingsToolStripMenuItem";
             this.settingsToolStripMenuItem.Size = new System.Drawing.Size(61, 20);
             this.settingsToolStripMenuItem.Text = "Settings";
@@ -84,7 +86,7 @@
             // mainDirectoryToolStripMenuItem
             // 
             this.mainDirectoryToolStripMenuItem.Name = "mainDirectoryToolStripMenuItem";
-            this.mainDirectoryToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.mainDirectoryToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.mainDirectoryToolStripMenuItem.Text = "Main Directory";
             this.mainDirectoryToolStripMenuItem.Click += new System.EventHandler(this.mainDirectoryToolStripMenuItem_Click);
             // 
@@ -94,7 +96,7 @@
             this.highestToolStripMenuItem,
             this.editGradingToolStripMenuItem});
             this.gradeToolStripMenuItem.Name = "gradeToolStripMenuItem";
-            this.gradeToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.gradeToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.gradeToolStripMenuItem.Text = "Grade";
             // 
             // highestToolStripMenuItem
@@ -160,6 +162,13 @@
             this.button4.UseVisualStyleBackColor = true;
             this.button4.Click += new System.EventHandler(this.button4_Click);
             // 
+            // testingToolStripMenuItem
+            // 
+            this.testingToolStripMenuItem.Name = "testingToolStripMenuItem";
+            this.testingToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.testingToolStripMenuItem.Text = "Testing";
+            this.testingToolStripMenuItem.Click += new System.EventHandler(this.testingToolStripMenuItem_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -200,6 +209,7 @@
         private System.Windows.Forms.ToolStripMenuItem lowestToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem editGradingToolStripMenuItem;
         private System.Windows.Forms.Button button4;
+        private System.Windows.Forms.ToolStripMenuItem testingToolStripMenuItem;
     }
 }
 

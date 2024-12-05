@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.Eventing.Reader;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -36,7 +37,6 @@ namespace employee_evaluation
             classesMethods.readMe5Instucrtion(folderPath.ReadMeFolderPath());
             classesMethods.readMeMosreThan5Instucrtion(folderPath.ReadMeFolderPath());
             classesMethods.readMeMoreInformation(folderPath.ReadMeFolderPath());
-
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -95,9 +95,7 @@ namespace employee_evaluation
 
             // creates subfolder
             folderCreation.createSubFolder();
-            folderCreation.createSubChartPictureFolder();
-
-            // MessageBox.Show(""+countSkillLabel);
+            folderCreation.createSubChartPictureFolder();          
 
             // locates the textfile and read its whole content.
             // and stores its content to a list. a list is where you can store texts in an array form.
@@ -110,13 +108,15 @@ namespace employee_evaluation
 
                 // calls the functions createFile from Employee class and pass the file path, and the contents
                 // this method is to create a text file
-                classesMethods.createFile(folderPath.SubFolderBelow5SkillLabelsPath(), personContent);
+                //classesMethods.createFile(folderPath.SubFolderBelow5SkillLabelsPath(), personContent);
+                General_class.createFile(folderPath.SubFolderBelow5SkillLabelsPath(), personContent);
             }
             else
             {
                 // creates 5 skill folder
                 folderCreation.createSubMoreThan5SkillsFolder();
-                classesMethods.createFile(folderPath.SubFolderMoreThan5SkillLabelsPath(), personContent);
+                //classesMethods.createFile(folderPath.SubFolderMoreThan5SkillLabelsPath(), personContent);
+                General_class.createFile(folderPath.SubFolderBelow5SkillLabelsPath(), personContent);
             }
         }
 
@@ -125,6 +125,7 @@ namespace employee_evaluation
         //it has a auto generated charts
         private void button3_Click(object sender, EventArgs e)  
         {
+
             folderCreation.createSubChartPictureFolder();
             // checks if gradings has value
             if (gradingH != "0" && gradingL != "0")
@@ -138,7 +139,7 @@ namespace employee_evaluation
                     {
                         folderCreation.createSubChartPictureFolder5Skills();                        
                         // store strings from other class                
-                        string skillGradeOne = (classesMethods.getSkillOne(File.ReadAllLines(filePath).ToList()));
+                        string skillGradeOne = (General_class.getSkillOne(File.ReadAllLines(filePath).ToList()));
                         string skillGradeTwo = (classesMethods.getSkillTwo(File.ReadAllLines(filePath).ToList()));
                         string skillGradeThree = (classesMethods.getSkillThree(File.ReadAllLines(filePath).ToList()));
                         string skillGradeFour = (classesMethods.getSkillFour(File.ReadAllLines(filePath).ToList()));
@@ -190,25 +191,29 @@ namespace employee_evaluation
 
         private void button4_Click(object sender, EventArgs e)
         {
+            // creates a new folder
             folderCreation.createSubChartPictureFolder();
+
+            int countSkillLabel = classesMethods.countSkillLabel(File.ReadAllLines(filePath).ToList());
+            string[] skillArray = new string[countSkillLabel];
+            int LocCord = 0;
+            string[] headerLabels = new string[countSkillLabel];
+            string personName = (classesMethods.personInfo(File.ReadAllLines(filePath).ToList()));
+            string[] personNames = { personName };
+            int COUNTLOOP = 0;
+            List<string> headerSkillLabel = classesMethods.autoHeaderSkillLabel(File.ReadAllLines(filePath).ToList());
+
             // checks if gradings has value
             if (gradingH != "0" && gradingL != "0")
             {
                 string checker = classesMethods.textFileChecker(File.ReadAllLines(filePath).ToList());
+                MessageBox.Show(""+(Int32.Parse(gradingH)* countSkillLabel));
                 if (checker == "Pass")
-                {
-                    int countSkillLabel = classesMethods.countSkillLabel(File.ReadAllLines(filePath).ToList());
-                    string[] skillArray = new string[countSkillLabel];                    
-                    int LocCord = 0;
-                    string[] headerLabels = new string[countSkillLabel];
-                    string personName = (classesMethods.personInfo(File.ReadAllLines(filePath).ToList()));
-                    string[] personNames = { personName };
-
-                    List<string> headerSkillLabel = classesMethods.autoHeaderSkillLabel(File.ReadAllLines(filePath).ToList());
+                {                    
                     if (countSkillLabel > 7)
                     {
-                        folderCreation.createSubChartPictureFolderMoreThan5Skills();
-                        
+                        // create new sub-folder into sub folder of report folder.
+                        folderCreation.createSubChartPictureFolderMoreThan5Skills();                        
                         for (int i = 0; i < countSkillLabel; i++)
                         {
                             // every loop the skillGrade from text is stored into the skillArray variable as an array
@@ -232,17 +237,25 @@ namespace employee_evaluation
                                 {
                                     //locCord = 306;                            
                                     LocCord = arrayChart(personNames, new string[] { skillArray[i] }, "-" + splitHeaderIntoLabel[i], LocCord, countSkillLabel);
-                                }
+                                }        
                             }
-                        }
+                            COUNTLOOP++;
+                        }                        
+                        
+                        if (COUNTLOOP == countSkillLabel)
+                        {
+                            Summarychart(personNames, new string[] { classesMethods.gradeAverage(File.ReadAllLines(filePath).ToList()) }, "- Final_Evaluation", LocCord, (Int32.Parse(gradingH) * countSkillLabel));
+                        }    
+                        
                         button2.Enabled = true;
                         // unclickable button 3,4
                         button3.Enabled = false;
                         button4.Enabled = false;
                         this.WindowState = FormWindowState.Maximized;
                         this.MaximizeBox = false;
+                        // creates a picture file, and save it into the newly created sub-folder
                         createChartPicture(countSkillLabel, countSkillLabel);
-                    }
+                    }                    
                 }
                 else
                 {
@@ -278,13 +291,19 @@ namespace employee_evaluation
             this.Hide();
         }
 
+
+        private void testingToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            //classesMethods.gradeAverage(File.ReadAllLines(filePath).ToList());
+        }
+
         private void Form1_FormClosed(object sender, FormClosedEventArgs e)
         {
             // exit the application completely
             Application.Exit();
         }
 
-        public int flatPointsCharts(string[] personContent, string[] gradeContent, string seriesName, int locationCord, int chartNumber)
+        public void Summarychart(string[] personContent, string[] gradeContent, string seriesName, int locationCord, int hGrade)
         {
             // if-else statements
             int locationCoordinates = locationCord == 0 ? locationCord = 76
@@ -305,29 +324,27 @@ namespace employee_evaluation
                 foreach (string gradeValue in gradeContent)
                 {
                     //split each array into an objects
-                    string[] splitSkill = gradeValue.Split(',');
+                    string[] GRADEVALUE = gradeValue.Split(',');
+
                     int arrayLength = gradeValue.Split(',').Length;
                     // chart creation
-                    for(int i = 0; i < arrayLength; i++)
-                    {
-                        newChart.Name = "Chart" + i;
-                    }
+                    newChart.Name = "Final-Evaluation";
                     newChart.Height = 300;
                     newChart.Width = System.Windows.Forms.SystemInformation.PrimaryMonitorSize.Width;
                     newChart.Series.Clear();
-                    var series1 = new System.Windows.Forms.DataVisualization.Charting.Series
+                    var passSeries = new System.Windows.Forms.DataVisualization.Charting.Series
                     {
-                        Name = seriesName,
+                        Name = "Pass",
                         Color = Color.FromArgb(randomClr.Next(0, 255), randomClr.Next(0, 255), randomClr.Next(0, 255)),
                         IsVisibleInLegend = true,
                         IsXValueIndexed = true,
                         ChartType = SeriesChartType.Column
                     };
-                    newChart.Series.Add(series1);
+                    newChart.Series.Add(passSeries);
 
-                    for (int j = 0; j < splitSkill.Length; j++)
+                    for (int j = 0; j < GRADEVALUE.Length; j++)
                     {
-                        series1.Points.AddXY(splitNameLabel[j], splitSkill[j]);
+                        passSeries.Points.AddXY(splitNameLabel[j], GRADEVALUE[j]);
                     }
                     newChart.Invalidate();
                     //chartArea.CursorX.IsUserEnabled = true;
@@ -336,6 +353,7 @@ namespace employee_evaluation
                     //chartArea.AxisY.ScaleView.Zoomable = true;
                     //chartArea.CursorX.AutoScroll = true;
                     //chartArea.CursorY.AutoScroll = true;
+                    chartArea.AxisY.Maximum = hGrade;
                     chartArea.AxisX.ScaleView.Zoom(0, 8);
                     chartArea.AxisX.ScaleView.MinSize = 0;
                     chartArea.AxisX.ScrollBar.Enabled = true;
@@ -351,6 +369,16 @@ namespace employee_evaluation
                     chartArea.AxisY.Title = "Grading";
                     chartArea.AxisY.TitleAlignment = StringAlignment.Far;
 
+                    // add stripline to y axis
+                    StripLine excellentLine = new StripLine();
+                    excellentLine.Interval = 0;
+                    excellentLine.IntervalOffset = (hGrade * .8);
+                    excellentLine.StripWidth = 2;
+                    excellentLine.BackColor = Color.Green;                    
+                    excellentLine.TextLineAlignment = StringAlignment.Far;
+                    excellentLine.Text = "Out-standing";
+                    chartArea.AxisY.StripLines.Add(excellentLine);
+
                     chartArea.Name = "ChartArea";
                     newChart.ChartAreas.Add(chartArea);
 
@@ -363,10 +391,11 @@ namespace employee_evaluation
                     //newChart.Dock = System.Windows.Forms.DockStyle.Fill;                    
                     
                     newChart.Visible = true;
+                    newChart.SaveImage(folderPath.chartPicturePath() + "\\Evaluation.png", ChartImageFormat.Png);
                     Controls.Add(newChart);                    
                 }   
             }            
-            return locationCoordinates;
+            //return locationCoordinates;
         }
 
         public int arrayChart(string[] personContent, string[] gradeContent, string seriesName, int locationCord, int chartNumber)
@@ -374,8 +403,8 @@ namespace employee_evaluation
             // if-else statements
             int locationCoordinates = locationCord == 0 ? locationCord = 76
                 : locationCord == 76 ? locationCord += 306
-                : locationCord = locationCord + 306;
-            
+                : locationCord = locationCord + 306;                  
+
             Chart[] newChart = new Chart[chartNumber];
             foreach (string nameLabel in personContent)
             {
@@ -383,11 +412,11 @@ namespace employee_evaluation
                 string[] splitNameLabel = nameLabel.Split(',');
                 // run thru the gradeContentArray collection
                 foreach (string gradeValue in gradeContent)
-                {
+                {                    
                     //split each array into an objects
                     string[] splitSkill = gradeValue.Split(',');
                     for(int i = 0; i < chartNumber; i++)
-                    {
+                    {                        
                         newChart[i] = new Chart();
                         newChart[i].Name = i.ToString();
                         newChart[i].Height = 300;
@@ -442,13 +471,15 @@ namespace employee_evaluation
                         //MessageBox.Show(string.Concat(newChart[i]));
                         
                         //newChart.Dock = System.Windows.Forms.DockStyle.Fill;                    
-                        newChart[i].Visible = true;
-                        Controls.Add(newChart[i]);
+                        newChart[i].Visible = true;                        
+                        Controls.Add(newChart[i]);                        
                     }
                 }
             }
+            // checks if charts are done creating
+            // if done then, chart a new chart dynamic with a summary                        
             return locationCoordinates;
-        }
+        }        
 
         public void createChartPicture(int count, int _countSkills)
         {
@@ -458,6 +489,8 @@ namespace employee_evaluation
                 {
                     if(_countSkills <= 5)
                     {
+                        // this search all the control features in the certain name
+                        // chart name was just number
                         Chart _saveChart = (Chart)this.Controls.Find(i.ToString(), true)[i];
                         _saveChart.SaveImage(folderPath.chartPicture5SkillsPath() + "\\Skill" + i + ".png", ChartImageFormat.Png);
                     }
@@ -466,7 +499,7 @@ namespace employee_evaluation
                         Chart _saveChart = (Chart)this.Controls.Find(i.ToString(), true)[i];
                         _saveChart.SaveImage(folderPath.chartPicture5SkillsUpPath() + "\\Skill" + i + ".png", ChartImageFormat.Png);
                     }
-                }
+                }                
             }
         }
     }

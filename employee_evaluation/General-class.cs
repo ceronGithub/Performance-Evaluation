@@ -19,6 +19,33 @@ namespace employee_evaluation
         Path_class pathFolder = new Path_class();
         Create_Folder subFolderCreation = new Create_Folder();
 
+
+        public string textFileChecker(List<string> contents)
+        {
+            int countHeader = 0;
+            string outputReturn = "";
+            // checks the header first
+            foreach (string header in contents.Take(1))
+            {
+                countHeader = header.Split(',').Count();
+            }
+            // checks if all value is equal to header
+            foreach (string checkValues in contents.Skip(1))
+            {
+                // checks value per-row
+                int INDEX = checkValues.Split(',').Length;
+                if (INDEX == countHeader)
+                {
+                    outputReturn = "Pass";
+                }
+                else
+                {
+                    outputReturn = "Fail";
+                }
+            }
+            // returns value
+            return outputReturn;
+        }
         public static string textReadLines(List<string> values)
         {
             List<string> output = new List<string>();
@@ -27,8 +54,7 @@ namespace employee_evaluation
                 output.Add(String.Join("\n", values));
             }
             return String.Join("", output);
-        }
-        
+        }        
         public List<string> exportToTextFile(List<string> value)
         {
             // this calls the Employee class
@@ -84,7 +110,7 @@ namespace employee_evaluation
             contents.Add(personInfo.ToString());
             // return the list content array
 
-            return contents;
+            return contents;            
         }        
         public string skillsGrade(List<string> employeeContent)
         {
@@ -118,8 +144,7 @@ namespace employee_evaluation
                 //gradeContents += string.Join(",", getGradeSkills) + ",";
             }
             return gradeContents;
-        }                
-        
+        }                        
         public string personInfo(List<string> employeeContent)
         {
             string personInfo = "";         
@@ -132,7 +157,7 @@ namespace employee_evaluation
             }            
             return personInfo;
         }       
-        public string getSkillOne(List<string> employeeContent)
+        public static string getSkillOne(List<string> employeeContent)
         {
             string skillOne = "";            
             
@@ -151,7 +176,6 @@ namespace employee_evaluation
             //MessageBox.Show(string.Concat(employeeContent.Skip(1)));
             return skillOne;
         }
-
         public string getSkillTwo(List<string> employeeContent)
         {
             string skills = "";            
@@ -164,7 +188,6 @@ namespace employee_evaluation
             //MessageBox.Show(skills);
             return skills;
         }
-
         public string getSkillThree(List<string> employeeContent)
         {
             string skills = "";            
@@ -177,7 +200,6 @@ namespace employee_evaluation
             //MessageBox.Show(skills);
             return skills;
         }
-
         public string getSkillFour(List<string> employeeContent)
         {
             string skills = "";            
@@ -190,7 +212,6 @@ namespace employee_evaluation
             //MessageBox.Show(skills);
             return skills;
         }
-
         public string getSkillFive(List<string> employeeContent)
         {
             string skills = "";            
@@ -203,7 +224,6 @@ namespace employee_evaluation
             //MessageBox.Show(skills);
             return skills;
         }
-
         public List<string> headerSkillLabel(List<string> headerContent)
         {
             //MessageBox.Show(string.Concat(headerContent.Take(1)));
@@ -220,7 +240,6 @@ namespace employee_evaluation
             }            
             return getHeaderSkillLabel;
         }
-
         public int countSkillLabel(List<string> headerContent)
         {
             int lengthItem = 0;
@@ -233,26 +252,49 @@ namespace employee_evaluation
             }            
             return lengthItem;
         }
-
         public string autoGetSkillGrade(List<string> employeeContent, int itemIndex)
-        {
-            string skillsGrades = "";           
+        {            
+            //MessageBox.Show(string.Concat(employeeContent[1].Split(',').Skip(3)));
+            string skillsGrades = "";            
             foreach (string skillsContent in employeeContent.Skip(1))
-            {
+            {                
                 // skips the 1-3 index of array
                 string[] seperateSkillContent = skillsContent.Split(',').Skip(3).ToArray();                
                 string[] getSkillsGrades = { seperateSkillContent[itemIndex] };
                 skillsGrades += string.Join(",",getSkillsGrades) + ",";
             }            
             return skillsGrades;
-        }
+        }        
 
-        public void createFile(string Path, List<string> contents)
-        {           
-           File.WriteAllLines(Path+"\\Evaluation.txt", contents);            
-           MessageBox.Show("File has been created. File can be viewed @ \n" + Path);
+        public string gradeAverage(List<string> fileContent)
+        {
+            string gradeString = "";
+            int ttl = 0;
+            // skips the header label
+            foreach (string gradeContent in fileContent.Skip(1))
+            {
+                string[] gradeValue = gradeContent.Split(',').Skip(3).ToArray();                
+                //count the skill labels, skip the name labels                
+                for (int i = 0; i < gradeContent.Split(',').Skip(3).Count(); i++)
+                {
+                    //skips the names iteration strings
+                    // array starts always to 0 iteration(loop)
+                    // but this (%) operator starts with 1 iteration(loop)
+                    // so since i = 0, that is first iteration(loop). out of 10 iteration(loop)
+                    if ((i+1) % gradeContent.Split(',').Skip(3).Count() == 0)
+                    {
+                        ttl += Int32.Parse(gradeValue[i]);
+                        gradeString += ttl + ",";
+                        ttl = 0;
+                    }
+                    else
+                    {
+                        ttl += Int32.Parse(gradeValue[i]);
+                    }                   
+                }                                                               
+            }           
+            return gradeString;
         }
-
         public void readMe5Instucrtion(string Path)
         {
             StreamWriter create5SkillText = new StreamWriter(Path+"\\5Skills.txt");
@@ -261,7 +303,6 @@ namespace employee_evaluation
             create5SkillText.Write("\n" + "follow,this,exact sample,1,2,3,4,5");
             create5SkillText.Close();
         }
-
         public void readMeMosreThan5Instucrtion(string Path)
         {
             StreamWriter create5SkillText = new StreamWriter(Path + "\\MoreThan5Skills.txt");
@@ -270,7 +311,6 @@ namespace employee_evaluation
             create5SkillText.Write("\n" + "follow,this,exact sample,1,1,1,1,1,1,1,1,1,1");
             create5SkillText.Close();
         }
-
         public void readMeMoreInformation(string Path)
         {
             StreamWriter create5SkillText = new StreamWriter(Path + "\\Contact.txt");
@@ -278,35 +318,12 @@ namespace employee_evaluation
                 "Viber / Telegram : +639668829302" +
                 "\n Skype : calsena.skype@gmail.com");
             create5SkillText.Close();
-        }
-
-        public string textFileChecker(List<string> contents)
+        }               
+        public static void createFile(string Path, List<string> contents)
         {
-            int countHeader = 0;
-            string outputReturn = "";
-            // checks the header first
-            foreach(string header in contents.Take(1))
-            {
-                countHeader = header.Split(',').Count();
-            }            
-            // checks if all value is equal to header
-            foreach(string checkValues in contents.Skip(1))
-            {
-                // checks value per-row
-                int INDEX = checkValues.Split(',').Length;
-                if(INDEX == countHeader)
-                {
-                    outputReturn = "Pass";
-                }
-                else
-                {
-                    outputReturn = "Fail";
-                }                
-            }
-            // returns value
-            return outputReturn;
+            File.WriteAllLines(Path + "\\Evaluation.txt", contents);
+            MessageBox.Show("File has been created. File can be viewed @ \n" + Path);
         }
-
         public static void staticMethod()
         {
             MessageBox.Show("static");
