@@ -314,7 +314,15 @@ namespace employee_evaluation
         public void readMeMoreInformation(string Path)
         {
             StreamWriter create5SkillText = new StreamWriter(Path + "\\Contact.txt");
-            create5SkillText.Write("This is just for demo. \n and i will stop the develop from here ;p. \n if you are interested you may contact me on the following...\n" +
+            create5SkillText.Write("This is just for demo. How to use: \n" +
+                "Install the application. set the grading values Settings\\Grade\\Edit Grading System.\n" +
+                "Set highest Grade and lowest. clicked save \n" +
+                "Import which of the either of the file (5skills nor MoreThan5Skills)\n" +
+                "If you click the 5skills, click the button summarize 5skills. (same procedure to the morethan 5skills)\n" +
+                "then charts will automatically generated, then click export.\n" +
+                "refresh the Report folder. you will see changes.\n" +
+                "Again this is just a demo.! and this program is forsale\n\n" +
+                "\n and i will stop the develop from here ;p. \n if you are interested you may contact me on the following...\n" +
                 "Viber / Telegram : +639668829302" +
                 "\n Skype : calsena.skype@gmail.com");
             create5SkillText.Close();

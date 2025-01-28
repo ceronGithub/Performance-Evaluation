@@ -116,7 +116,7 @@ namespace employee_evaluation
                 // creates 5 skill folder
                 folderCreation.createSubMoreThan5SkillsFolder();
                 //classesMethods.createFile(folderPath.SubFolderMoreThan5SkillLabelsPath(), personContent);
-                General_class.createFile(folderPath.SubFolderBelow5SkillLabelsPath(), personContent);
+                General_class.createFile(folderPath.SubFolderMoreThan5SkillLabelsPath(), personContent);
             }
         }
 
@@ -207,7 +207,7 @@ namespace employee_evaluation
             if (gradingH != "0" && gradingL != "0")
             {
                 string checker = classesMethods.textFileChecker(File.ReadAllLines(filePath).ToList());
-                MessageBox.Show(""+(Int32.Parse(gradingH)* countSkillLabel));
+               // MessageBox.Show(""+(Int32.Parse(gradingH)* countSkillLabel));
                 if (checker == "Pass")
                 {                    
                     if (countSkillLabel > 7)
